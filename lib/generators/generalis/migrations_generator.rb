@@ -23,14 +23,13 @@ module Generalis
 
       def json_column_type
         case ActiveRecord::Base.connection.adapter_name
-        when 'SQLite'
-          ':string'
-        when 'MySQL'
-          ':json'
-        when 'PostgreSQL'
-          ':jsonb'
+        when 'SQLite'     then ':string'
+        when 'MySQL'      then ':json'
+        when 'PostgreSQL' then ':jsonb'
         else
-          logger.warn('Unsupported database adapter; using String for JSON data types')
+          Rails.logger.warn('Unsupported database adapter; using String for JSON data types')
+
+          ':string'
         end
       end
     end
