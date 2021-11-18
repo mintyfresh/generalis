@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Generalis
-  class Entry
+  class Entry < ActiveRecord::Base
     module Links
       # @param name [Symbol]
       # @param class_name [String]
