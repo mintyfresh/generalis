@@ -3,7 +3,7 @@
 module Generalis
   class Entry < ActiveRecord::Base
     module DSL
-    private
+    protected
 
       def transaction_id(&block)
         after_initialize(if: :new_record?) do
