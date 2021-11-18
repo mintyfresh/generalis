@@ -14,6 +14,7 @@ class CreateLedgerOperations < ActiveRecord::Migration[6.1]
       t.column     :metadata, :jsonb
       t.timestamps default: -> { 'NOW()' }
 
+      t.check_constraint 'amount_cents >= 0'
       t.check_constraint 'coefficient IN (-1, +1)'
 
       # Index for efficiently selecting the latest balance on the account.

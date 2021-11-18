@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_18_214333) do
+ActiveRecord::Schema.define(version: 2021_11_18_221803) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 2021_11_18_214333) do
     t.index ["account_id"], name: "index_ledger_operations_on_account_id"
     t.index ["entry_id"], name: "index_ledger_operations_on_entry_id"
     t.index ["label"], name: "index_ledger_operations_on_label", unique: true
+    t.check_constraint "amount_cents >= 0"
     t.check_constraint "coefficient = ANY (ARRAY['-1'::integer, (+ 1)])"
   end
 

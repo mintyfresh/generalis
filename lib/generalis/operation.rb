@@ -14,7 +14,7 @@ module Generalis
     validates :coefficient, inclusion: { in: [CREDIT, DEBIT] }
 
     with_options with_model_currency: :currency do
-      monetize :amount_cents, numericality: { greater_than: 0 }
+      monetize :amount_cents, numericality: { greater_than_or_equal_to: 0 }
       monetize :balance_after_cents, allow_nil: true
     end
 

@@ -56,9 +56,9 @@ RSpec.describe Generalis::Operation, type: :model do
     expect(operation).to be_invalid
   end
 
-  it 'is invalid when the amount is zero' do
+  it 'is valid when the amount is zero' do
     operation.amount = 0
-    expect(operation).to be_invalid
+    expect(operation).to be_valid
   end
 
   it 'is invalid when the amount is negative' do
