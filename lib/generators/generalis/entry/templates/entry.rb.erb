@@ -1,0 +1,31 @@
+# frozen_string_literal: true
+
+class <%= class_name %> < Generalis::Entry
+  transaction_id do
+    # TODO: Generate a transaction ID
+  end
+
+  description do
+    # Optional: Provide a description of the entry
+  end
+
+  occurred_at do
+    # Optional: Include a timestamp for the entry (defaults to now)
+  end
+
+  metadata do
+    # Optional: Any additional metadata to be stored with the entry (an Array or Hash)
+  end
+
+  credit do |credit|
+    # TODO: Add credit operations
+    # credit.account = Account.lookup(...)
+    # credit.amount  = Money.from_cents(100_00, 'CAD')
+  end
+
+  debit do |debit|
+    # TODO: Add debit operations
+    # debit.account = Account.lookup(...)
+    # debit.amount  = Money.from_cents(100_00, 'CAD')
+  end
+end

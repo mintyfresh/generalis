@@ -1,8 +1,11 @@
 Description:
-    Explain the generator
+    Generates the migration files to create database tables for Generalis models.
 
 Example:
-    bin/rails generate migration Thing
+    bin/rails generate generalis:migrations
 
-    This will create:
-        what/will/it/create
+    This will create:                                                                                                                                        14:38:52
+      db/migrate/00000000000000_create_ledger_accounts.rb
+      db/migrate/00000000000000_create_ledger_entries.rb
+      db/migrate/00000000000000_create_ledger_operations.rb
+      db/migrate/00000000000000_create_ledger_links.rb
