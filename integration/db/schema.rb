@@ -1,0 +1,80 @@
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
+#
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
+#
+# It's strongly recommended that you check this file into your version control system.
+
+ActiveRecord::Schema.define(version: 2021_11_18_213245) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "ledger_accounts", force: :cascade do |t|
+    t.string "type", null: false
+    t.string "owner_type"
+    t.bigint "owner_id"
+    t.string "name", null: false
+    t.integer "coefficient", null: false
+    t.datetime "created_at", precision: 6, default: -> { "now()" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "now()" }, null: false
+    t.index ["name"], name: "index_ledger_accounts_on_name", unique: true, where: "(owner_id IS NULL)"
+    t.index ["owner_type", "owner_id", "name"], name: "index_ledger_accounts_on_owner_type_and_owner_id_and_name", unique: true
+    t.index ["owner_type", "owner_id"], name: "index_ledger_accounts_on_owner"
+    t.check_constraint "coefficient = ANY (ARRAY['-1'::integer, (+ 1)])"
+  end
+
+  create_table "ledger_entries", force: :cascade do |t|
+    t.string "type"
+    t.string "source_type"
+    t.bigint "source_id"
+    t.string "transaction_id", null: false
+    t.string "description"
+    t.jsonb "metadata"
+    t.datetime "occurred_at", default: -> { "now()" }, null: false
+    t.datetime "created_at", precision: 6, default: -> { "now()" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "now()" }, null: false
+    t.index ["source_type", "source_id"], name: "index_ledger_entries_on_source"
+    t.index ["transaction_id"], name: "index_ledger_entries_on_transaction_id", unique: true
+  end
+
+  create_table "ledger_links", force: :cascade do |t|
+    t.bigint "entry_id", null: false
+    t.string "linkable_type", null: false
+    t.bigint "linkable_id", null: false
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, default: -> { "now()" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "now()" }, null: false
+    t.index ["entry_id", "name"], name: "index_ledger_links_on_entry_id_and_name"
+    t.index ["entry_id"], name: "index_ledger_links_on_entry_id"
+    t.index ["linkable_type", "linkable_id"], name: "index_ledger_links_on_linkable"
+  end
+
+  create_table "ledger_operations", force: :cascade do |t|
+    t.string "type", null: false
+    t.bigint "account_id", null: false
+    t.bigint "entry_id", null: false
+    t.string "label"
+    t.string "currency", null: false
+    t.integer "amount_cents", null: false
+    t.integer "balance_after_cents", null: false
+    t.integer "coefficient", null: false
+    t.jsonb "metadata"
+    t.datetime "created_at", precision: 6, default: -> { "now()" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "now()" }, null: false
+    t.index ["account_id", "currency", "id"], name: "index_ledger_operations_on_account_id_and_currency_and_id", order: { id: :desc }
+    t.index ["account_id"], name: "index_ledger_operations_on_account_id"
+    t.index ["entry_id"], name: "index_ledger_operations_on_entry_id"
+    t.index ["label"], name: "index_ledger_operations_on_label", unique: true
+    t.check_constraint "coefficient = ANY (ARRAY['-1'::integer, (+ 1)])"
+  end
+
+  add_foreign_key "ledger_links", "ledger_entries", column: "entry_id", on_delete: :cascade
+  add_foreign_key "ledger_operations", "ledger_accounts", column: "account_id"
+  add_foreign_key "ledger_operations", "ledger_entries", column: "entry_id"
+end

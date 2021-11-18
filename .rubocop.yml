@@ -6,6 +6,9 @@ require:
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.0
+  Exclude:
+    - bin/*
+    - integration/bin/*
 
 Layout/AccessModifierIndentation:
   EnforcedStyle: outdent
@@ -19,9 +22,11 @@ Layout/MultilineMethodCallIndentation:
 Layout/SpaceInLambdaLiteral:
   EnforcedStyle: require_space
 
+Naming/RescuedExceptionsVariableName:
+  PreferredName: error
+
 Rails/ApplicationRecord:
   Enabled: false
 
 Style/Documentation:
-  Exclude:
-    - lib/generalis/models/**/*.rb
+  Enabled: false

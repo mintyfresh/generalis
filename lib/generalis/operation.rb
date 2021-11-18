@@ -22,6 +22,12 @@ module Generalis
       self.balance_after = account.balance(currency) + net_amount
     end
 
+    scope :credit, -> { where(coefficient: CREDIT) }
+    scope :debit,  -> { where(coefficient: DEBIT)  }
+
+    scope :before, -> (operation) { where(arel_table[:id].lt(operation.id)) }
+    scope :after,  -> (operation) { where(arel_table[:id].gt(operation.id)) }
+
     scope :at_or_before, -> (time) { joins(:entry).merge(Entry.at_or_before(time)) }
 
     # @param value [Integer]
