@@ -1,5 +1,27 @@
+require:
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
+
 AllCops:
+  NewCops: enable
   TargetRubyVersion: 3.0
+
+Layout/AccessModifierIndentation:
+  EnforcedStyle: outdent
 
 Layout/LineLength:
   Max: 120
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/SpaceInLambdaLiteral:
+  EnforcedStyle: require_space
+
+Rails/ApplicationRecord:
+  Enabled: false
+
+Style/Documentation:
+  Exclude:
+    - lib/generalis/models/**/*.rb
