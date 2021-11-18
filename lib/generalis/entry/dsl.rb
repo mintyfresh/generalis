@@ -29,18 +29,22 @@ module Generalis
         end
       end
 
-      def credit(&block)
+      # @param label [Symbol, String, nil]
+      # @return [void]
+      def credit(label = nil, &block)
         after_initialize(if: :new_record?) do
-          credit = Credit.new
+          credit = Credit.new(label: label)
           instance_exec(credit, &block)
 
           operations << credit
         end
       end
 
-      def debit(&block)
+      # @param label [Symbol, String, nil]
+      # @return [void]
+      def debit(label = nil, &block)
         after_initialize(if: :new_record?) do
-          debit = Debit.new
+          debit = Debit.new(label: label)
           instance_exec(debit, &block)
 
           operations << debit

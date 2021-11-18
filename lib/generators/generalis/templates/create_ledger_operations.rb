@@ -6,6 +6,7 @@ class CreateLedgerOperations < ActiveRecord::Migration[6.1]
       t.string     :type, null: false
       t.belongs_to :account, null: false, foreign_key: { to_table: :ledger_accounts }
       t.belongs_to :entry, null: false, foreign_key: { to_table: :ledger_entries }
+      t.string     :label, null: true, index: { unique: true }
       t.string     :currency, null: false
       t.integer    :amount_cents, null: false
       t.integer    :balance_after_cents, null: false

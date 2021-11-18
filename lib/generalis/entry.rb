@@ -1,30 +1,10 @@
 # frozen_string_literal: true
 
-require_relative 'entry/dsl'
-require_relative 'entry/links'
-
-# == Schema Information
-#
-# Table name: ledger_entries
-#
-#  id             :bigint           not null, primary key
-#  type           :string
-#  source_type    :string
-#  source_id      :bigint
-#  transaction_id :string           not null
-#  description    :string
-#  metadata       :jsonb
-#  occurred_at    :datetime         not null
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#
-# Indexes
-#
-#  index_ledger_entries_on_source          (source_type,source_id)
-#  index_ledger_entries_on_transaction_id  (transaction_id) UNIQUE
-#
 module Generalis
   class Entry < ActiveRecord::Base
+    require_relative 'entry/dsl'
+    require_relative 'entry/links'
+
     extend Entry::DSL
     extend Entry::Links
 
