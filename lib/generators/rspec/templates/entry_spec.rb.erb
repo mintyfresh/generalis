@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+
+RSpec.describe <%= module_name %>::<%= class_name %>, type: :model do
+  subject(:<%= factory_name %>) { build(:<%= factory_name %>) }
+
+  it 'has a valid factory' do
+    expect(<%= factory_name %>).to be_valid
+  end
+end
