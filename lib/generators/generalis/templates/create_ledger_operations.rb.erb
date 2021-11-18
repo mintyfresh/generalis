@@ -11,7 +11,7 @@ class CreateLedgerOperations < ActiveRecord::Migration[6.1]
       t.integer    :amount_cents, null: false
       t.integer    :balance_after_cents, null: false
       t.integer    :coefficient, null: false
-      t.jsonb      :metadata
+      t.column     :metadata, <%= json_column_type %>
       t.timestamps default: -> { 'NOW()' }
 
       t.check_constraint 'coefficient IN (-1, +1)'

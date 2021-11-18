@@ -7,7 +7,7 @@ class CreateLedgerEntries < ActiveRecord::Migration[6.1]
       t.belongs_to :source, polymorphic: true, null: true
       t.string     :transaction_id, null: false, index: { unique: true }
       t.string     :description
-      t.jsonb      :metadata
+      t.column     :metadata, :jsonb
       t.timestamp  :occurred_at, null: false, default: -> { 'NOW()' }
       t.timestamps default: -> { 'NOW()' }
     end
