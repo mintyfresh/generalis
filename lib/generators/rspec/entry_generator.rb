@@ -15,6 +15,10 @@ module Rspec
         "#{class_name.underscore}_spec"
       end
 
+      def qualified_class_name
+        "#{module_path}::#{class_name}"
+      end
+
       def class_name
         "#{name.to_s.classify.chomp('Entry')}Entry"
       end

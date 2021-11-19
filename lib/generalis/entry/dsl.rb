@@ -6,25 +6,25 @@ module Generalis
     protected
 
       def transaction_id(&block)
-        after_initialize(if: :new_record?) do
+        before_validation(if: :new_record?) do
           self.transaction_id = instance_exec(&block)
         end
       end
 
       def description(&block)
-        after_initialize(if: :new_record?) do
+        before_validation(if: :new_record?) do
           self.description = instance_exec(&block)
         end
       end
 
       def metadata(&block)
-        after_initialize(if: :new_record?) do
+        before_validation(if: :new_record?) do
           self.metadata = instance_exec(&block)
         end
       end
 
       def occurred_at(&block)
-        after_initialize(if: :new_record?) do
+        before_validation(if: :new_record?) do
           self.occurred_at = instance_exec(&block)
         end
       end
@@ -32,7 +32,7 @@ module Generalis
       # @param label [Symbol, String, nil]
       # @return [void]
       def credit(label = nil, &block)
-        after_initialize(if: :new_record?) do
+        before_validation(if: :new_record?) do
           credit = Credit.new(label: label)
           instance_exec(credit, &block)
 
@@ -43,7 +43,7 @@ module Generalis
       # @param label [Symbol, String, nil]
       # @return [void]
       def debit(label = nil, &block)
-        after_initialize(if: :new_record?) do
+        before_validation(if: :new_record?) do
           debit = Debit.new(label: label)
           instance_exec(debit, &block)
 

@@ -43,6 +43,18 @@ module Generalis
       where(operations_in_currency.arel.exists)
     }
 
+    # @param source [ActiveRecord::Base]
+    # #@return [Ledger::BaseEntry]
+    def self.build_for(source)
+      new(source: source)
+    end
+
+    # @param source [ActiveRecord::Base]
+    # @return [Ledger::BaseEntry]
+    def self.create_for(source)
+      build_for(source).tap(&:save!)
+    end
+
     # @return [Hash{String => Money}]
     def credit_amounts
       operations.select(&:credit?).group_by(&:currency).transform_values { |operations| operations.sum(&:amount) }

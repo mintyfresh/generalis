@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :<%= factory_name %>, class: '<%= module_name %>::<%= class_name %>' do
-    type { '<%= module_name %>::<%= class_name %>' }
+  factory :<%= factory_name %>, class: '<%= qualified_class_name %>' do
+    initialize_with { <%= qualified_class_name %>.build_for(source) }
+
+    type { '<%= qualified_class_name %>' }
   end
 end
