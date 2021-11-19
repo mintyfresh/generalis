@@ -8,7 +8,7 @@ RSpec::Matchers.define :to_debit do |account, owner: nil|
   include Generalis::RSpec::ResolveAmountHelper
 
   match do |entry|
-    return false if entry.invalid?
+    entry.validate if entry.operations.none?
 
     account    = resolve_account(account, owner: owner)
     operations = entry.operations.select { |operation| operation.debit? && operation.account == account }

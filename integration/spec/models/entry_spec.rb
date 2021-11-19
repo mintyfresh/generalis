@@ -44,8 +44,27 @@ RSpec.describe Generalis::Entry, type: :model do
     expect(entry).to be_invalid
   end
 
+  it 'is invalid when the entry only has credit operations' do
+    entry.operations = [build(:credit, entry: entry)]
+    expect(entry).to be_invalid
+  end
+
+  it 'is invalid when the entry only has debit operations' do
+    entry.operations = [build(:debit, entry: entry)]
+    expect(entry).to be_invalid
+  end
+
   it 'is invalid when the credit operations do not equal the debit operations' do
     entry.operations << build(:credit, entry: entry)
     expect(entry).to be_invalid
+  end
+
+  it 'properly handles an account being debited and credited in the same entry' do
+    account = create(:account)
+    entry.operations = [Generalis::Credit.new(account: account, amount: 100.00, currency: 'CAD'),
+                        Generalis::Debit.new(account: account, amount: 100.00, currency: 'CAD')]
+    entry.save!
+
+    expect(account.balance('CAD')).to eq(0.00)
   end
 end

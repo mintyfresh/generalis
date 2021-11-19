@@ -28,5 +28,8 @@ Naming/RescuedExceptionsVariableName:
 Rails/ApplicationRecord:
   Enabled: false
 
+RSpec/ExpectChange:
+  Enabled: false
+
 Style/Documentation:
   Enabled: false
