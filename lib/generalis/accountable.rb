@@ -5,7 +5,7 @@ module Generalis
     extend ActiveSupport::Concern
 
     included do
-      has_many :accounts, as: :owner, class_name: 'Generalis::Account', dependent: false, inverse_of: :owner
+      has_many :ledger_accounts, as: :owner, class_name: 'Generalis::Account', dependent: false, inverse_of: :owner
     end
 
     class_methods do
