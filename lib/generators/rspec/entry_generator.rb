@@ -16,7 +16,7 @@ module Rspec
       end
 
       def qualified_class_name
-        "#{module_path}::#{class_name}"
+        "#{module_name}::#{class_name}"
       end
 
       def class_name

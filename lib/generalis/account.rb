@@ -18,8 +18,10 @@ module Generalis
     # @param name [String]
     # @param owner [ActiveRecord::Base, nil]
     # @return [Account]
-    def self.for(name, owner: nil)
-      create_or_find_by!(name: name, owner: owner)
+    def self.[](name, owner: nil)
+      find_or_create_by!(name: name, owner: owner)
+    rescue ActiveRecord::RecordNotUnique
+      find_by!(name, owner: owner)
     end
 
     # @param name [String]
