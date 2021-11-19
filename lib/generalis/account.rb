@@ -45,7 +45,15 @@ module Generalis
 
     # @return [Hash{String => Integer}]
     def self.trial_balances
-      joins(:operations)
+      balances = Operation.select(:account_id, :balance_after_cents, :currency, Arel.sql(<<-SQL.squish))
+        RANK() OVER (
+          PARTITION BY #{Operation.quoted_table_name}.account_id, #{Operation.quoted_table_name}.currency
+          ORDER BY #{Operation.quoted_table_name}.id DESC
+        ) AS rank
+      SQL
+
+      Operation.from(balances, Operation.quoted_table_name)
+        .joins(:account).where(rank: 1)
         .group(Operation.arel_table[:currency])
         .sum(Operation.arel_table[:balance_after_cents] * arel_table[:coefficient])
     end
