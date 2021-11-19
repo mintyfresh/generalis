@@ -7,6 +7,7 @@ require_relative 'generalis/version'
 
 module Generalis
   autoload :Account, 'generalis/account'
+  autoload :Accountable, 'generalis/accountable'
   autoload :Asset, 'generalis/asset'
   autoload :Expense, 'generalis/expense'
   autoload :Liability, 'generalis/liability'

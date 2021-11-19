@@ -15,16 +15,21 @@ module Generalis
     validates :name, presence: true
     validates :coefficient, inclusion: { in: [CREDIT_NORMAL, DEBIT_NORMAL] }
 
-    # @param name [String]
+    # @param name [Symbol, String]
+    # @param owner [ActiveRecord::Base, nil]
+    # @return [Account]
+    def self.define(name, owner: nil)
+      create_or_find_by!(name: name, owner: owner)
+    end
+
+    # @param name [Symbol, String]
     # @param owner [ActiveRecord::Base, nil]
     # @return [Account]
     def self.[](name, owner: nil)
-      find_or_create_by!(name: name, owner: owner)
-    rescue ActiveRecord::RecordNotUnique
-      find_by!(name, owner: owner)
+      find_by!(name: name, owner: owner)
     end
 
-    # @param name [String]
+    # @param name [Symbol, String]
     # @param owner [ActiveRecord::Base, nil]
     # @return [Account]
     def self.lookup(name, owner: nil)
