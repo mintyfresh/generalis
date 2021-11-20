@@ -69,8 +69,8 @@ ActiveRecord::Schema.define(version: 2021_11_18_221803) do
     t.datetime "updated_at", precision: 6, default: -> { "now()" }, null: false
     t.index ["account_id", "currency", "id"], name: "index_ledger_operations_on_account_id_and_currency_and_id", order: { id: :desc }
     t.index ["account_id"], name: "index_ledger_operations_on_account_id"
+    t.index ["entry_id", "label"], name: "index_ledger_operations_on_entry_id_and_label", unique: true
     t.index ["entry_id"], name: "index_ledger_operations_on_entry_id"
-    t.index ["label"], name: "index_ledger_operations_on_label", unique: true
     t.check_constraint "amount_cents >= 0"
     t.check_constraint "coefficient = ANY (ARRAY['-1'::integer, (+ 1)])"
   end
