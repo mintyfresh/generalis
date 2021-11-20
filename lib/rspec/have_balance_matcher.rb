@@ -11,6 +11,6 @@ RSpec::Matchers.define :have_balance do |amount, currency = nil|
     account = resolve_account(account, owner: owner)
     amount  = resolve_amount(amount, currency)
 
-    account.balance(amount.currency) == amount
+    account.balance(amount.currency.to_s) == amount
   end
 end

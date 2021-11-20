@@ -3,7 +3,7 @@
 require_relative 'helpers/resolve_account_helper'
 require_relative 'helpers/resolve_amount_helper'
 
-RSpec::Matchers.define :to_debit do |account, owner: nil|
+RSpec::Matchers.define :credit_account do |account, owner: nil|
   include Generalis::RSpec::ResolveAccountHelper
   include Generalis::RSpec::ResolveAmountHelper
 
@@ -11,7 +11,7 @@ RSpec::Matchers.define :to_debit do |account, owner: nil|
     entry.validate if entry.operations.none?
 
     account    = resolve_account(account, owner: owner)
-    operations = entry.operations.select { |operation| operation.debit? && operation.account == account }
+    operations = entry.operations.select { |operation| operation.credit? && operation.account == account }
 
     operations.any? && matches_amount?(operations)
   end

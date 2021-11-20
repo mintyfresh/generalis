@@ -10,10 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_18_221803) do
+ActiveRecord::Schema.define(version: 2021_11_20_205654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "charges", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.integer "amount_cents", null: false
+    t.string "currency", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["customer_id"], name: "index_charges_on_customer_id"
+  end
+
+  create_table "customers", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "ledger_accounts", force: :cascade do |t|
     t.string "type", null: false
@@ -75,7 +90,40 @@ ActiveRecord::Schema.define(version: 2021_11_18_221803) do
     t.check_constraint "coefficient = ANY (ARRAY['-1'::integer, (+ 1)])"
   end
 
+  create_table "orders", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.bigint "provider_id", null: false
+    t.integer "order_amount_cents", null: false
+    t.integer "delivery_fee_cents", null: false
+    t.integer "platform_fee_cents", null: false
+    t.integer "total_cents", null: false
+    t.string "currency", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["customer_id"], name: "index_orders_on_customer_id"
+    t.index ["provider_id"], name: "index_orders_on_provider_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.bigint "provider_id", null: false
+    t.integer "amount_cents", null: false
+    t.string "currency", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["provider_id"], name: "index_payments_on_provider_id"
+  end
+
+  create_table "providers", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  add_foreign_key "charges", "customers"
   add_foreign_key "ledger_links", "ledger_entries", column: "entry_id", on_delete: :cascade
   add_foreign_key "ledger_operations", "ledger_accounts", column: "account_id"
   add_foreign_key "ledger_operations", "ledger_entries", column: "entry_id"
+  add_foreign_key "orders", "customers"
+  add_foreign_key "orders", "providers"
+  add_foreign_key "payments", "providers"
 end
