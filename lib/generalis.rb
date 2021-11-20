@@ -15,6 +15,7 @@ module Generalis
 
   autoload :Entry, 'generalis/entry'
   autoload :Link, 'generalis/link'
+  autoload :Linkable, 'generalis/linkable'
 
   autoload :Operation, 'generalis/operation'
   autoload :Credit, 'generalis/credit'

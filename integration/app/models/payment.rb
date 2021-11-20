@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Payment < ApplicationRecord
+  include Generalis::Linkable
+
   belongs_to :provider
 
   validates :currency, presence: true

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Order < ApplicationRecord
+  include Generalis::Linkable
+
   belongs_to :customer
   belongs_to :provider
 

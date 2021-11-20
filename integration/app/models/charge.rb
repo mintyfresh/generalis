@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Charge < ApplicationRecord
+  include Generalis::Linkable
+
   belongs_to :customer
 
   validates :currency, presence: true
