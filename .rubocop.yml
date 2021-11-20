@@ -9,6 +9,7 @@ AllCops:
   Exclude:
     - bin/*
     - integration/bin/*
+    - integration/db/schema.rb
 
 Layout/AccessModifierIndentation:
   EnforcedStyle: outdent
@@ -21,6 +22,11 @@ Layout/MultilineMethodCallIndentation:
 
 Layout/SpaceInLambdaLiteral:
   EnforcedStyle: require_space
+
+Metrics/BlockLength:
+  Exclude:
+    - '**/*_spec.rb'
+    - 'lib/rspec/*_matcher.rb'
 
 Naming/RescuedExceptionsVariableName:
   PreferredName: error

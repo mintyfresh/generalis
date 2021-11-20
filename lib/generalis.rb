@@ -22,17 +22,15 @@ module Generalis
 
   # @return [Hash{String => Integer}]
   def self.trial_balances
-    subquery = Operation.select(:account_id, :balance_after_cents, :currency, Arel.sql(<<-SQL.squish))
-      RANK() OVER (
-        PARTITION BY #{Operation.quoted_table_name}.account_id, #{Operation.quoted_table_name}.currency
-        ORDER BY #{Operation.quoted_table_name}.id DESC
-      ) AS rank
-    SQL
+    subquery = Operation
+      .group(:account_id, :currency)
+      .select(Operation.arel_table[:id].maximum)
 
-    Operation.from(subquery, Operation.quoted_table_name)
-      .joins(:account).where(rank: 1)
+    Operation
+      .joins(:account)
+      .where(id: subquery)
       .group(:currency)
-      .sum(Operation.arel_table[:balance_after_cents] * Account.arel_table[:coefficient])
+      .sum((Operation.arel_table[:balance_after_cents] * Account.arel_table[:coefficient]))
   end
 
   def self.table_name_prefix
