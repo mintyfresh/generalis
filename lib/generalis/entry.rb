@@ -2,11 +2,8 @@
 
 module Generalis
   class Entry < ActiveRecord::Base
-    require_relative 'entry/dsl'
-    require_relative 'entry/links'
-
-    extend Entry::DSL
-    extend Entry::Links
+    autoload :DSL, 'generalis/entry/dsl'
+    autoload :Links, 'generalis/entry/links'
 
     belongs_to :source, optional: true, polymorphic: true
 
