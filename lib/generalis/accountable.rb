@@ -6,6 +6,8 @@ module Generalis
 
     included do
       has_many :ledger_accounts, as: :owner, class_name: 'Generalis::Account', dependent: false, inverse_of: :owner
+      has_many :ledger_operations, through: :ledger_accounts, source: :operations
+      has_many :ledger_entries, through: :ledger_accounts, source: :entries
     end
 
     class_methods do
