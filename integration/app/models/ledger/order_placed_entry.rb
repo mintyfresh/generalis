@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Ledger::OrderPlacedEntry < Ledger::BaseEntry
-  alias_attribute :order, :source
+  has_one_linked :order
 
   transaction_id do
     "order-#{order.id}"

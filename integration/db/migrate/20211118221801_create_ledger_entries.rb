@@ -4,7 +4,6 @@ class CreateLedgerEntries < ActiveRecord::Migration[6.1]
   def change
     create_table :ledger_entries do |t|
       t.string     :type
-      t.belongs_to :source, polymorphic: true, null: true
       t.string     :transaction_id, null: false, index: { unique: true }
       t.string     :description
       t.column     :metadata, :jsonb

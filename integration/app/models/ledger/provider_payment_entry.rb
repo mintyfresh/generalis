@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Ledger::ProviderPaymentEntry < Ledger::BaseEntry
-  alias_attribute :payment, :source
+  has_one_linked :payment
 
   transaction_id do
     "payment-#{payment.id}"

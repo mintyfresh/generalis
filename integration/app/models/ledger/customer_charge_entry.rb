@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Ledger::CustomerChargeEntry < Ledger::BaseEntry
-  alias_attribute :charge, :source
+  has_one_linked :charge
 
   transaction_id do
     "charge-#{charge.id}"

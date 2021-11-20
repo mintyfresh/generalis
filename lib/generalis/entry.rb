@@ -5,8 +5,6 @@ module Generalis
     autoload :DSL, 'generalis/entry/dsl'
     autoload :Links, 'generalis/entry/links'
 
-    belongs_to :source, optional: true, polymorphic: true
-
     has_many :links, dependent: :destroy, inverse_of: :entry
     has_many :operations, dependent: :destroy, inverse_of: :entry
     has_many :accounts, through: :operations
@@ -39,18 +37,6 @@ module Generalis
 
       where(operations_in_currency.arel.exists)
     }
-
-    # @param source [ActiveRecord::Base]
-    # #@return [Ledger::BaseEntry]
-    def self.build_for(source)
-      new(source: source)
-    end
-
-    # @param source [ActiveRecord::Base]
-    # @return [Ledger::BaseEntry]
-    def self.create_for(source)
-      build_for(source).tap(&:save!)
-    end
 
     # @return [Hash{String => Money}]
     def credit_amounts
