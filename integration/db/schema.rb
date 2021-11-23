@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 2021_11_20_205654) do
     t.string "type", null: false
     t.bigint "account_id", null: false
     t.bigint "transaction_id", null: false
-    t.string "label"
+    t.uuid "pair_id"
     t.string "currency", null: false
     t.integer "amount_cents", null: false
     t.integer "balance_after_cents", null: false
@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 2021_11_20_205654) do
     t.datetime "updated_at", precision: 6, default: -> { "now()" }, null: false
     t.index ["account_id", "currency", "id"], name: "index_ledger_entries_on_account_id_and_currency_and_id", order: { id: :desc }
     t.index ["account_id"], name: "index_ledger_entries_on_account_id"
-    t.index ["transaction_id", "label"], name: "index_ledger_entries_on_transaction_id_and_label", unique: true
+    t.index ["transaction_id", "pair_id"], name: "index_ledger_entries_on_transaction_id_and_pair_id"
     t.index ["transaction_id"], name: "index_ledger_entries_on_transaction_id"
     t.check_constraint "amount_cents >= 0"
     t.check_constraint "coefficient = ANY (ARRAY['-1'::integer, (+ 1)])"

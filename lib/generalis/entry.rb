@@ -5,7 +5,7 @@ module Generalis
     CREDIT = -1
     DEBIT  = +1
 
-    attr_readonly :type, :account_id, :transaction_id, :currency, :amount_cents, :coefficient
+    attr_readonly :type, :account_id, :transaction_id, :pair_id, :currency, :amount_cents, :coefficient
 
     belongs_to :account, inverse_of: :entries
     belongs_to :ledger_transaction, class_name: 'Transaction', foreign_key: :transaction_id, inverse_of: :entries
@@ -51,6 +51,11 @@ module Generalis
     # @return [Money]
     def net_amount
       amount * coefficient * account.coefficient
+    end
+
+    # @return [Entry, nil]
+    def opposite
+      ledger_transaction.entries.find_by(pair_id: pair_id, coefficient: -coefficient)
     end
   end
 end
