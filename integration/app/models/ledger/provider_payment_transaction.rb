@@ -19,14 +19,10 @@ class Ledger::ProviderPaymentTransaction < Ledger::BaseTransaction
     # Optional: Any additional metadata to be stored with the transaction (an Array or Hash)
   end
 
-  credit do |credit|
-    credit.account = Generalis::Asset[:cash]
-    credit.amount  = payment.amount
-  end
-
-  debit do |debit|
-    debit.account = provider.accounts_payable
-    debit.amount  = payment.amount
+  double_entry do |e|
+    e.debit  = provider.accounts_payable
+    e.credit = Generalis::Asset[:cash]
+    e.amount = payment.amount
   end
 
   delegate :provider, to: :payment

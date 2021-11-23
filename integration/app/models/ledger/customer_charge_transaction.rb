@@ -19,14 +19,10 @@ class Ledger::CustomerChargeTransaction < Ledger::BaseTransaction
     # Optional: Any additional metadata to be stored with the transaction (an Array or Hash)
   end
 
-  credit do |credit|
-    credit.account = customer.accounts_receivable
-    credit.amount  = charge.amount
-  end
-
-  debit do |debit|
-    debit.account = Generalis::Asset[:cash]
-    debit.amount  = charge.amount
+  double_entry do |e|
+    e.debit  = Generalis::Asset[:cash]
+    e.credit = customer.accounts_receivable
+    e.amount = charge.amount
   end
 
   delegate :customer, to: :charge
