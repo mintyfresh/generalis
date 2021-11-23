@@ -46,15 +46,12 @@ ActiveRecord::Schema.define(version: 2021_11_20_205654) do
 
   create_table "ledger_entries", force: :cascade do |t|
     t.string "type"
-    t.string "source_type"
-    t.bigint "source_id"
     t.string "transaction_id", null: false
     t.string "description"
     t.jsonb "metadata"
     t.datetime "occurred_at", default: -> { "now()" }, null: false
     t.datetime "created_at", precision: 6, default: -> { "now()" }, null: false
     t.datetime "updated_at", precision: 6, default: -> { "now()" }, null: false
-    t.index ["source_type", "source_id"], name: "index_ledger_entries_on_source"
     t.index ["transaction_id"], name: "index_ledger_entries_on_transaction_id", unique: true
   end
 
