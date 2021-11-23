@@ -19,30 +19,30 @@ RSpec.describe Generalis::Transaction, type: :model do
     expect(transaction).to be_invalid
   end
 
-  it 'is invalid without operations' do
-    transaction.operations = []
+  it 'is invalid without entries' do
+    transaction.entries = []
     expect(transaction).to be_invalid
   end
 
-  it 'is invalid when the transaction only has credit operations' do
-    transaction.operations = [build(:credit, ledger_transaction: transaction)]
+  it 'is invalid when the transaction only has credit entries' do
+    transaction.entries = [build(:credit, ledger_transaction: transaction)]
     expect(transaction).to be_invalid
   end
 
-  it 'is invalid when the transaction only has debit operations' do
-    transaction.operations = [build(:debit, ledger_transaction: transaction)]
+  it 'is invalid when the transaction only has debit entries' do
+    transaction.entries = [build(:debit, ledger_transaction: transaction)]
     expect(transaction).to be_invalid
   end
 
-  it 'is invalid when the credit operations do not equal the debit operations' do
-    transaction.operations << build(:credit, ledger_transaction: transaction)
+  it 'is invalid when the credit entries do not equal the debit entries' do
+    transaction.entries << build(:credit, ledger_transaction: transaction)
     expect(transaction).to be_invalid
   end
 
   it 'properly handles an account being debited and credited in the same transaction' do
     account = create(:account)
-    transaction.operations = [Generalis::Credit.new(account: account, amount: 100.00, currency: 'CAD'),
-                              Generalis::Debit.new(account: account, amount: 100.00, currency: 'CAD')]
+    transaction.entries = [Generalis::Credit.new(account: account, amount: 100.00, currency: 'CAD'),
+                           Generalis::Debit.new(account: account, amount: 100.00, currency: 'CAD')]
     transaction.save!
 
     expect(account.balance('CAD')).to eq(0.00)

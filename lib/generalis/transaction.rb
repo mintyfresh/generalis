@@ -6,11 +6,11 @@ module Generalis
     autoload :Links, 'generalis/transaction/links'
 
     has_many :links, dependent: :destroy, inverse_of: :ledger_transaction
-    has_many :operations, dependent: :destroy, inverse_of: :ledger_transaction
-    has_many :accounts, through: :operations
+    has_many :entries, dependent: :destroy, inverse_of: :ledger_transaction
+    has_many :accounts, through: :entries
 
     validates :transaction_id, presence: true, uniqueness: { on: :create }
-    validates :operations, presence: true
+    validates :entries, presence: true
 
     validate on: :create do
       errors.add(:base, :trial_balance_nonzero) if credit_amounts != debit_amounts
@@ -19,33 +19,33 @@ module Generalis
     before_create do
       # Acquire locks on all participating accounts to calculate their balance.
       # Locks are acquired in a deterministic sequence to prevent deadlocks.
-      operations.map(&:account).reject(&:new_record?).uniq.sort_by(&:id).each(&:lock!)
+      entries.map(&:account).reject(&:new_record?).uniq.sort_by(&:id).each(&:lock!)
     end
 
     scope :at_or_before, -> (time) { where(occurred_at: ..time) }
 
     scope :with_account, lambda { |account|
-      operations_on_account = Operation.where(account: account)
-        .where(Operation.arel_table[:transaction_id].eq(arel_table[:id]))
+      entries_on_account = Entry.where(account: account)
+        .where(Entry.arel_table[:transaction_id].eq(arel_table[:id]))
 
-      where(operations_on_account.arel.exists)
+      where(entries_on_account.arel.exists)
     }
 
     scope :with_currency, lambda { |currency|
-      operations_in_currency = Operation.where(currency: currency)
-        .where(Operation.arel_table[:transaction_id].eq(arel_table[:id]))
+      entries_in_currency = Entry.where(currency: currency)
+        .where(Entry.arel_table[:transaction_id].eq(arel_table[:id]))
 
-      where(operations_in_currency.arel.exists)
+      where(entries_in_currency.arel.exists)
     }
 
     # @return [Hash{String => Money}]
     def credit_amounts
-      operations.select(&:credit?).group_by(&:currency).transform_values { |operations| operations.sum(&:amount) }
+      entries.select(&:credit?).group_by(&:currency).transform_values { |entries| entries.sum(&:amount) }
     end
 
     # @return [Hash{String => Money}]
     def debit_amounts
-      operations.select(&:debit?).group_by(&:currency).transform_values { |operations| operations.sum(&:amount) }
+      entries.select(&:debit?).group_by(&:currency).transform_values { |entries| entries.sum(&:amount) }
     end
   end
 end

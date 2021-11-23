@@ -36,7 +36,7 @@ module Generalis
           credit = Credit.new(label: label)
           instance_exec(credit, &block)
 
-          operations << credit
+          entries << credit
         end
       end
 
@@ -47,7 +47,7 @@ module Generalis
           debit = Debit.new(label: label)
           instance_exec(debit, &block)
 
-          operations << debit
+          entries << debit
         end
       end
     end

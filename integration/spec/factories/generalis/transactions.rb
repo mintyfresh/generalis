@@ -12,8 +12,8 @@ FactoryBot.define do
 
     after(:build) do |transaction, e|
       e.currencies.each do |currency|
-        transaction.operations << build(:credit, ledger_transaction: transaction, currency: currency, amount: e.amount)
-        transaction.operations << build(:debit,  ledger_transaction: transaction, currency: currency, amount: e.amount)
+        transaction.entries << build(:credit, ledger_transaction: transaction, currency: currency, amount: e.amount)
+        transaction.entries << build(:debit,  ledger_transaction: transaction, currency: currency, amount: e.amount)
       end
     end
   end

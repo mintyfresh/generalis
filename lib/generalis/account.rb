@@ -9,8 +9,8 @@ module Generalis
 
     belongs_to :owner, optional: true, polymorphic: true
 
-    has_many :operations, dependent: :restrict_with_error, inverse_of: :account
-    has_many :ledger_transactions, through: :operations
+    has_many :entries, dependent: :restrict_with_error, inverse_of: :account
+    has_many :ledger_transactions, through: :entries
 
     validates :name, presence: true
     validates :coefficient, inclusion: { in: [CREDIT_NORMAL, DEBIT_NORMAL] }
@@ -67,7 +67,7 @@ module Generalis
     # @param at [Time, nil]
     # @return [Money]
     def balance(currency, at: nil)
-      scope = operations.where(currency: currency)
+      scope = entries.where(currency: currency)
       scope = scope.at_or_before(at) if at
 
       scope.last&.balance_after || Money.from_amount(0, currency)
@@ -78,11 +78,11 @@ module Generalis
     # @param at [Time, nil]
     # @return [Hash{String => Money}]
     def balances(at: nil)
-      scope = operations.group(:currency).select(Operation.arel_table[:id].maximum)
+      scope = entries.group(:currency).select(Entry.arel_table[:id].maximum)
       scope = scope.at_or_before(at) if at
 
-      operations.where(id: scope)
-        .map { |operation| [operation.currency, operation.balance_after] }
+      entries.where(id: scope)
+        .map { |entry| [entry.currency, entry.balance_after] }
         .to_h
     end
   end

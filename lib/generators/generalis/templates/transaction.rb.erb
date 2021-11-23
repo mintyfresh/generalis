@@ -17,15 +17,15 @@ class <%= module_name %>::<%= class_name %> < Ledger::BaseTransaction
     # Optional: Any additional metadata to be stored with the transaction (an Array or Hash)
   end
 
-  credit do |credit|
-    # TODO: Add credit operations
-    # credit.account = Account.lookup(...)
-    # credit.amount  = Money.from_cents(100_00, 'CAD')
+  credit do |entry|
+    # TODO: Add credit entries
+    # entry.account = Account.lookup(...)
+    # entry.amount  = Money.from_cents(100_00, 'CAD')
   end
 
-  debit do |debit|
-    # TODO: Add debit operations
-    # debit.account = Account.lookup(...)
-    # debit.amount  = Money.from_cents(100_00, 'CAD')
+  debit do |entry|
+    # TODO: Add debit entries
+    # entry.account = Account.lookup(...)
+    # entry.amount  = Money.from_cents(100_00, 'CAD')
   end
 end

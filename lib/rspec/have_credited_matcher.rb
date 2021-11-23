@@ -4,13 +4,13 @@ RSpec::Matchers.define :have_credited do
   match do |account, owner: nil|
     account = lookup_account(account, owner: owner)
 
-    operations = account.operations.credit.order(:id)
-    last       = operations.last
+    entries = account.entries.credit.order(:id)
+    latest  = entries.last
 
     block_arg.call
-    operations = operations.after(last) if last
+    entries = entries.after(latest) if latest
 
-    operations.any? && matches_amount?(operations)
+    entries.any? && matches_amount?(entries)
   end
 
   chain(:amount) do |amount, currency = nil|
@@ -42,13 +42,13 @@ private
     end
   end
 
-  # @param operations [Array<Generalis::Operation>]
+  # @param entries [Array<Generalis::Entry>]
   # @return [Boolean]
-  def matches_amount?(operations)
+  def matches_amount?(entries)
     return true if @amount.nil?
 
-    operations
-      .select { |operation| operation.currency == @amount.currency }
+    entries
+      .select { |entry| entry.currency == @amount.currency }
       .sum(&:amount) == @amount
   end
 end

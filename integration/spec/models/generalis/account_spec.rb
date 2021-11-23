@@ -30,23 +30,23 @@ RSpec.describe Generalis::Account, type: :model do
     let(:currency) { 'CAD' }
     let(:account) { create(:account) }
 
-    it 'returns zero when the account has no operations' do
+    it 'returns zero when the account has no entries' do
       expect(balance).to be_zero
     end
 
     it 'returns the latest balance on the account with the specified currency' do
-      operation = create(:operation, account: account, currency: currency)
-      expect(balance).to eq(operation.balance_after)
+      entry = create(:entry, account: account, currency: currency)
+      expect(balance).to eq(entry.balance_after)
     end
 
     it 'ignores balances associated with other currencies on the account' do
-      operation = create(:operation, account: account, currency: 'USD')
-      expect(balance).not_to eq(operation.balance_after)
+      entry = create(:entry, account: account, currency: 'USD')
+      expect(balance).not_to eq(entry.balance_after)
     end
 
     it 'ignores balances associated with other accounts' do
-      operation = create(:operation, currency: currency)
-      expect(balance).not_to eq(operation.balance_after)
+      entry = create(:entry, currency: currency)
+      expect(balance).not_to eq(entry.balance_after)
     end
   end
 end

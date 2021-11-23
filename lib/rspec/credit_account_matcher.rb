@@ -8,25 +8,25 @@ RSpec::Matchers.define :credit_account do |account, owner: nil|
   include Generalis::RSpec::ResolveAmountHelper
 
   match do |transaction|
-    transaction.validate if transaction.operations.none?
+    transaction.validate if transaction.entries.none?
 
-    account    = resolve_account(account, owner: owner)
-    operations = transaction.operations.select { |operation| operation.credit? && operation.account == account }
+    account = resolve_account(account, owner: owner)
+    entries = transaction.entries.select { |entry| entry.credit? && entry.account == account }
 
-    operations.any? && matches_amount?(operations)
+    entries.any? && matches_amount?(entries)
   end
 
   chain(:with_amount) do |amount, currency = nil|
     @amount = resolve_amount(amount, currency)
   end
 
-  # @param operations [Array<Generalis::Operation>]
+  # @param entries [Array<Generalis::Entry>]
   # @return [Boolean]
-  def matches_amount?(operations)
+  def matches_amount?(entries)
     return true if @amount.nil?
 
-    operations
-      .select { |operation| operation.currency.casecmp(@amount.currency).zero? }
+    entries
+      .select { |entry| entry.currency.casecmp(@amount.currency).zero? }
       .sum(&:amount) == @amount
   end
 end

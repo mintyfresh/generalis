@@ -17,21 +17,21 @@ module Generalis
   autoload :Link, 'generalis/link'
   autoload :Linkable, 'generalis/linkable'
 
-  autoload :Operation, 'generalis/operation'
+  autoload :Entry, 'generalis/entry'
   autoload :Credit, 'generalis/credit'
   autoload :Debit, 'generalis/debit'
 
   # @return [Hash{String => Integer}]
   def self.trial_balances
-    subquery = Operation
+    subquery = Entry
       .group(:account_id, :currency)
-      .select(Operation.arel_table[:id].maximum)
+      .select(Entry.arel_table[:id].maximum)
 
-    Operation
+    Entry
       .joins(:account)
       .where(id: subquery)
       .group(:currency)
-      .sum((Operation.arel_table[:balance_after_cents] * Account.arel_table[:coefficient]))
+      .sum((Entry.arel_table[:balance_after_cents] * Account.arel_table[:coefficient]))
   end
 
   def self.table_name_prefix
