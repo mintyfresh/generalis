@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Ledger::OrderPlacedEntry < Ledger::BaseEntry
+class Ledger::OrderPlacedTransaction < Ledger::BaseTransaction
   has_one_linked :order
 
   transaction_id do
@@ -16,7 +16,7 @@ class Ledger::OrderPlacedEntry < Ledger::BaseEntry
   end
 
   metadata do
-    # Optional: Any additional metadata to be stored with the entry (an Array or Hash)
+    # Optional: Any additional metadata to be stored with the transaction (an Array or Hash)
   end
 
   # CUSTOMER SIDE

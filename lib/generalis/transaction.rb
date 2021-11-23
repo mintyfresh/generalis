@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module Generalis
-  class Entry < ActiveRecord::Base
-    autoload :DSL, 'generalis/entry/dsl'
-    autoload :Links, 'generalis/entry/links'
+  class Transaction < ActiveRecord::Base
+    autoload :DSL, 'generalis/transaction/dsl'
+    autoload :Links, 'generalis/transaction/links'
 
-    has_many :links, dependent: :destroy, inverse_of: :entry
-    has_many :operations, dependent: :destroy, inverse_of: :entry
+    has_many :links, dependent: :destroy, inverse_of: :ledger_transaction
+    has_many :operations, dependent: :destroy, inverse_of: :ledger_transaction
     has_many :accounts, through: :operations
 
     validates :transaction_id, presence: true, uniqueness: { on: :create }
@@ -26,14 +26,14 @@ module Generalis
 
     scope :with_account, lambda { |account|
       operations_on_account = Operation.where(account: account)
-        .where(Operation.arel_table[:entry_id].eq(arel_table[:id]))
+        .where(Operation.arel_table[:transaction_id].eq(arel_table[:id]))
 
       where(operations_on_account.arel.exists)
     }
 
     scope :with_currency, lambda { |currency|
       operations_in_currency = Operation.where(currency: currency)
-        .where(Operation.arel_table[:entry_id].eq(arel_table[:id]))
+        .where(Operation.arel_table[:transaction_id].eq(arel_table[:id]))
 
       where(operations_in_currency.arel.exists)
     }

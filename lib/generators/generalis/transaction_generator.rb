@@ -4,11 +4,11 @@ require 'rails/generators'
 
 module Generalis
   module Generators
-    class EntryGenerator < Rails::Generators::NamedBase
+    class TransactionGenerator < Rails::Generators::NamedBase
       source_root File.expand_path('templates', __dir__)
 
-      def create_entry
-        template 'entry.rb.erb', "app/models/#{module_path}/#{file_name}.rb"
+      def create_transaction
+        template 'transaction.rb.erb', "app/models/#{module_path}/#{file_name}.rb"
       end
 
       def file_name
@@ -16,7 +16,7 @@ module Generalis
       end
 
       def class_name
-        "#{name.to_s.classify.chomp('Entry')}Entry"
+        "#{name.to_s.classify.chomp('Transaction')}Transaction"
       end
 
       def module_name

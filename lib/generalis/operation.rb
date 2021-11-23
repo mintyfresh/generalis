@@ -5,10 +5,10 @@ module Generalis
     CREDIT = -1
     DEBIT  = +1
 
-    attr_readonly :type, :account_id, :entry_id, :currency, :amount_cents, :coefficient
+    attr_readonly :type, :account_id, :transaction_id, :currency, :amount_cents, :coefficient
 
     belongs_to :account, inverse_of: :operations
-    belongs_to :entry, inverse_of: :operations
+    belongs_to :ledger_transaction, class_name: 'Transaction', foreign_key: :transaction_id, inverse_of: :operations
 
     validates :currency, presence: true
     validates :coefficient, inclusion: { in: [CREDIT, DEBIT] }
@@ -28,7 +28,7 @@ module Generalis
     scope :before, -> (operation) { where(arel_table[:id].lt(operation.id)) }
     scope :after,  -> (operation) { where(arel_table[:id].gt(operation.id)) }
 
-    scope :at_or_before, -> (time) { joins(:entry).merge(Entry.at_or_before(time)) }
+    scope :at_or_before, -> (time) { joins(:transaction).merge(Transaction.at_or_before(time)) }
 
     # @param value [Integer]
     # @return [void]

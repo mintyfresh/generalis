@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-class <%= module_name %>::<%= class_name %> < Ledger::BaseEntry
+class <%= module_name %>::<%= class_name %> < Ledger::BaseTransaction
   transaction_id do
     # TODO: Generate a transaction ID
   end
 
   description do
-    # Optional: Provide a description of the entry
+    # Optional: Provide a description of the transaction
   end
 
   occurred_at do
-    # Optional: Include a timestamp for the entry (defaults to now)
+    # Optional: Include a timestamp for the transaction (defaults to now)
   end
 
   metadata do
-    # Optional: Any additional metadata to be stored with the entry (an Array or Hash)
+    # Optional: Any additional metadata to be stored with the transaction (an Array or Hash)
   end
 
   credit do |credit|

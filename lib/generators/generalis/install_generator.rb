@@ -11,8 +11,8 @@ module Generalis
         template 'generalis.rb', 'config/initializers/generalis.rb'
       end
 
-      def create_base_entry
-        template 'base_entry.rb', 'app/models/ledger/base_entry.rb'
+      def create_base_transaction
+        template 'base_transaction.rb', 'app/models/ledger/base_transaction.rb'
       end
     end
   end

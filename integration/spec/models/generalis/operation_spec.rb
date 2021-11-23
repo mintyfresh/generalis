@@ -14,8 +14,8 @@ RSpec.describe Generalis::Operation, type: :model do
     expect(operation).to be_invalid
   end
 
-  it 'is invalid without an entry' do
-    operation.entry = nil
+  it 'is invalid without a transaction' do
+    operation.ledger_transaction = nil
     expect(operation).to be_invalid
   end
 

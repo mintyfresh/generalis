@@ -10,7 +10,7 @@ module Generalis
     belongs_to :owner, optional: true, polymorphic: true
 
     has_many :operations, dependent: :restrict_with_error, inverse_of: :account
-    has_many :entries, through: :operations
+    has_many :ledger_transactions, through: :operations
 
     validates :name, presence: true
     validates :coefficient, inclusion: { in: [CREDIT_NORMAL, DEBIT_NORMAL] }

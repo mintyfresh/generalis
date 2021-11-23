@@ -44,33 +44,22 @@ ActiveRecord::Schema.define(version: 2021_11_20_205654) do
     t.check_constraint "coefficient = ANY (ARRAY['-1'::integer, (+ 1)])"
   end
 
-  create_table "ledger_entries", force: :cascade do |t|
-    t.string "type"
-    t.string "transaction_id", null: false
-    t.string "description"
-    t.jsonb "metadata"
-    t.datetime "occurred_at", default: -> { "now()" }, null: false
-    t.datetime "created_at", precision: 6, default: -> { "now()" }, null: false
-    t.datetime "updated_at", precision: 6, default: -> { "now()" }, null: false
-    t.index ["transaction_id"], name: "index_ledger_entries_on_transaction_id", unique: true
-  end
-
   create_table "ledger_links", force: :cascade do |t|
-    t.bigint "entry_id", null: false
+    t.bigint "transaction_id", null: false
     t.string "linkable_type", null: false
     t.bigint "linkable_id", null: false
     t.string "name", null: false
     t.datetime "created_at", precision: 6, default: -> { "now()" }, null: false
     t.datetime "updated_at", precision: 6, default: -> { "now()" }, null: false
-    t.index ["entry_id", "name"], name: "index_ledger_links_on_entry_id_and_name"
-    t.index ["entry_id"], name: "index_ledger_links_on_entry_id"
     t.index ["linkable_type", "linkable_id"], name: "index_ledger_links_on_linkable"
+    t.index ["transaction_id", "name"], name: "index_ledger_links_on_transaction_id_and_name"
+    t.index ["transaction_id"], name: "index_ledger_links_on_transaction_id"
   end
 
   create_table "ledger_operations", force: :cascade do |t|
     t.string "type", null: false
     t.bigint "account_id", null: false
-    t.bigint "entry_id", null: false
+    t.bigint "transaction_id", null: false
     t.string "label"
     t.string "currency", null: false
     t.integer "amount_cents", null: false
@@ -81,10 +70,21 @@ ActiveRecord::Schema.define(version: 2021_11_20_205654) do
     t.datetime "updated_at", precision: 6, default: -> { "now()" }, null: false
     t.index ["account_id", "currency", "id"], name: "index_ledger_operations_on_account_id_and_currency_and_id", order: { id: :desc }
     t.index ["account_id"], name: "index_ledger_operations_on_account_id"
-    t.index ["entry_id", "label"], name: "index_ledger_operations_on_entry_id_and_label", unique: true
-    t.index ["entry_id"], name: "index_ledger_operations_on_entry_id"
+    t.index ["transaction_id", "label"], name: "index_ledger_operations_on_transaction_id_and_label", unique: true
+    t.index ["transaction_id"], name: "index_ledger_operations_on_transaction_id"
     t.check_constraint "amount_cents >= 0"
     t.check_constraint "coefficient = ANY (ARRAY['-1'::integer, (+ 1)])"
+  end
+
+  create_table "ledger_transactions", force: :cascade do |t|
+    t.string "type"
+    t.string "transaction_id", null: false
+    t.string "description"
+    t.jsonb "metadata"
+    t.datetime "occurred_at", default: -> { "now()" }, null: false
+    t.datetime "created_at", precision: 6, default: -> { "now()" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "now()" }, null: false
+    t.index ["transaction_id"], name: "index_ledger_transactions_on_transaction_id", unique: true
   end
 
   create_table "orders", force: :cascade do |t|
@@ -117,9 +117,9 @@ ActiveRecord::Schema.define(version: 2021_11_20_205654) do
   end
 
   add_foreign_key "charges", "customers"
-  add_foreign_key "ledger_links", "ledger_entries", column: "entry_id", on_delete: :cascade
+  add_foreign_key "ledger_links", "ledger_transactions", column: "transaction_id", on_delete: :cascade
   add_foreign_key "ledger_operations", "ledger_accounts", column: "account_id"
-  add_foreign_key "ledger_operations", "ledger_entries", column: "entry_id"
+  add_foreign_key "ledger_operations", "ledger_transactions", column: "transaction_id"
   add_foreign_key "orders", "customers"
   add_foreign_key "orders", "providers"
   add_foreign_key "payments", "providers"

@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :link, class: 'Generalis::Link' do
-    association :entry, strategy: :build
+    association :ledger_transaction, factory: :transaction, strategy: :build
     association :linkable, factory: :account, strategy: :build
 
     name { 'test' }

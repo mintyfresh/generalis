@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Ledger::CustomerChargeEntry < Ledger::BaseEntry
+class Ledger::CustomerChargeTransaction < Ledger::BaseTransaction
   has_one_linked :charge
 
   transaction_id do
@@ -16,7 +16,7 @@ class Ledger::CustomerChargeEntry < Ledger::BaseEntry
   end
 
   metadata do
-    # Optional: Any additional metadata to be stored with the entry (an Array or Hash)
+    # Optional: Any additional metadata to be stored with the transaction (an Array or Hash)
   end
 
   credit do |credit|

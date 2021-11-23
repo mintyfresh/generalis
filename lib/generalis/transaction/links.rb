@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Generalis
-  class Entry < ActiveRecord::Base
+  class Transaction < ActiveRecord::Base
     module Links
       # @param name [Symbol]
       # @param class_name [String]
@@ -9,7 +9,7 @@ module Generalis
       def has_one_linked(name, class_name: name.to_s.camelize) # rubocop:disable Naming/PredicateName
         has_one :"#{name}_link", -> { where(name: name) },
                 class_name: 'Generalis::Link', dependent: false,
-                foreign_key: :entry_id, inverse_of: :entry
+                foreign_key: :transaction_id, inverse_of: :ledger_transaction
 
         has_one name, through: :"#{name}_link", source: :linkable, source_type: class_name
       end
@@ -20,7 +20,7 @@ module Generalis
       def has_many_linked(name, class_name: name.to_s.camelize) # rubocop:disable Naming/PredicateName
         has_many :"#{name}_links", -> { where(name: name) },
                  class_name: 'Generalis::Link', dependent: false,
-                 foreign_key: :entry_id, inverse_of: :entry
+                 foreign_key: :transaction_id, inverse_of: :ledger_transaction
 
         has_many name, through: :"#{name}_links", source: :linkable, source_type: class_name
       end

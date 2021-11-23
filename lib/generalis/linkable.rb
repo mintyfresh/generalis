@@ -8,7 +8,8 @@ module Generalis
       has_many :ledger_links, as: :linkable, class_name: 'Generalis::Link',
                               dependent: :restrict_with_error, inverse_of: :linkable
 
-      has_many :linked_ledger_entries, class_name: 'Generalis::Entry', through: :ledger_links, source: :entry
+      has_many :linked_ledger_transactions, class_name: 'Generalis::Transaction',
+                                            through: :ledger_links, source: :ledger_transaction
     end
   end
 end

@@ -4,11 +4,11 @@ require 'rails/generators'
 
 module FactoryBot
   module Generators
-    class EntryGenerator < Rails::Generators::NamedBase
+    class TransactionGenerator < Rails::Generators::NamedBase
       source_root File.expand_path('templates', __dir__)
 
-      def create_entry_factory
-        template 'entries.rb.erb', "spec/factories/#{module_path}/#{file_name}.rb"
+      def create_transaction_factory
+        template 'transactions.rb.erb', "spec/factories/#{module_path}/#{file_name}.rb"
       end
 
       def file_name
@@ -20,7 +20,7 @@ module FactoryBot
       end
 
       def class_name
-        "#{name.to_s.classify.chomp('Entry')}Entry"
+        "#{name.to_s.classify.chomp('Transaction')}Transaction"
       end
 
       def module_name

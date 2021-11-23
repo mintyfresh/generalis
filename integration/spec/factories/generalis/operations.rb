@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :operation, class: 'Generalis::Operation' do
     association :account, strategy: :create
-    association :entry, strategy: :create
+    association :ledger_transaction, factory: :transaction, strategy: :create
 
     type { 'Generalis::Operation' }
     currency { %w[CAD USD EUR].sample }

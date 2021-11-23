@@ -4,11 +4,11 @@ require 'rails/generators'
 
 module Rspec
   module Generators
-    class EntryGenerator < Rails::Generators::NamedBase
+    class TransactionGenerator < Rails::Generators::NamedBase
       source_root File.expand_path('templates', __dir__)
 
-      def create_entry_spec
-        template 'entry_spec.rb.erb', "spec/models/#{module_path}/#{file_name}.rb"
+      def create_transaction_spec
+        template 'transaction_spec.rb.erb', "spec/models/#{module_path}/#{file_name}.rb"
       end
 
       def file_name
@@ -20,7 +20,7 @@ module Rspec
       end
 
       def class_name
-        "#{name.to_s.classify.chomp('Entry')}Entry"
+        "#{name.to_s.classify.chomp('Transaction')}Transaction"
       end
 
       def module_name

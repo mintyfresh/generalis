@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class CreateLedgerEntries < ActiveRecord::Migration[6.1]
+class CreateLedgerTransactions < ActiveRecord::Migration[6.1]
   def change
-    create_table :ledger_entries do |t|
+    create_table :ledger_transactions do |t|
       t.string     :type
       t.string     :transaction_id, null: false, index: { unique: true }
       t.string     :description

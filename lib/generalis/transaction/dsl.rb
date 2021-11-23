@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Generalis
-  class Entry < ActiveRecord::Base
+  class Transaction < ActiveRecord::Base
     module DSL
     protected
 

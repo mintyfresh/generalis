@@ -16,7 +16,7 @@ module Generalis
 
       def create_migration_files
         migration_template 'create_ledger_accounts.rb.erb', 'db/migrate/create_ledger_accounts.rb'
-        migration_template 'create_ledger_entries.rb.erb', 'db/migrate/create_ledger_entries.rb'
+        migration_template 'create_ledger_transactions.rb.erb', 'db/migrate/create_ledger_transactions.rb'
         migration_template 'create_ledger_operations.rb.erb', 'db/migrate/create_ledger_operations.rb'
         migration_template 'create_ledger_links.rb.erb', 'db/migrate/create_ledger_links.rb'
       end

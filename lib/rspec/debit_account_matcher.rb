@@ -7,11 +7,11 @@ RSpec::Matchers.define :debit_account do |account, owner: nil|
   include Generalis::RSpec::ResolveAccountHelper
   include Generalis::RSpec::ResolveAmountHelper
 
-  match do |entry|
-    entry.validate if entry.operations.none?
+  match do |transaction|
+    transaction.validate if transaction.operations.none?
 
     account    = resolve_account(account, owner: owner)
-    operations = entry.operations.select { |operation| operation.debit? && operation.account == account }
+    operations = transaction.operations.select { |operation| operation.debit? && operation.account == account }
 
     operations.any? && matches_amount?(operations)
   end

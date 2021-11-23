@@ -5,7 +5,7 @@ class CreateLedgerOperations < ActiveRecord::Migration[6.1]
     create_table :ledger_operations do |t|
       t.string     :type, null: false
       t.belongs_to :account, null: false, foreign_key: { to_table: :ledger_accounts }
-      t.belongs_to :entry, null: false, foreign_key: { to_table: :ledger_entries }
+      t.belongs_to :transaction, null: false, foreign_key: { to_table: :ledger_transactions }
       t.string     :label, null: true
       t.string     :currency, null: false
       t.integer    :amount_cents, null: false
@@ -17,7 +17,7 @@ class CreateLedgerOperations < ActiveRecord::Migration[6.1]
       t.check_constraint 'amount_cents >= 0'
       t.check_constraint 'coefficient IN (-1, +1)'
 
-      t.index %i[entry_id label], unique: true
+      t.index %i[transaction_id label], unique: true
       # Index for efficiently selecting the latest balance on the account.
       t.index %i[account_id currency id], order: { id: :desc }
     end

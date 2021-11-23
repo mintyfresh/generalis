@@ -13,7 +13,7 @@ module Generalis
   autoload :Liability, 'generalis/liability'
   autoload :Revenue, 'generalis/revenue'
 
-  autoload :Entry, 'generalis/entry'
+  autoload :Transaction, 'generalis/transaction'
   autoload :Link, 'generalis/link'
   autoload :Linkable, 'generalis/linkable'
 

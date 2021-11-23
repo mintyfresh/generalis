@@ -9,8 +9,8 @@ RSpec.describe Generalis::Link, type: :model do
     expect(link).to be_valid
   end
 
-  it 'is invalid without an entry' do
-    link.entry = nil
+  it 'is invalid without a transaction' do
+    link.ledger_transaction = nil
     expect(link).to be_invalid
   end
 

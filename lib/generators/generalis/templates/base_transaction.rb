@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Ledger
-  class BaseEntry < Generalis::Entry
+  class BaseTransaction < Generalis::Transaction
     extend DSL
     extend Links
 
