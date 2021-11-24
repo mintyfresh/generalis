@@ -17,15 +17,10 @@ class <%= module_name %>::<%= class_name %> < Ledger::BaseTransaction
     # Optional: Any additional metadata to be stored with the transaction (an Array or Hash)
   end
 
-  credit do |entry|
-    # TODO: Add credit entries
-    # entry.account = Account.lookup(...)
-    # entry.amount  = Money.from_cents(100_00, 'CAD')
-  end
-
-  debit do |entry|
-    # TODO: Add debit entries
-    # entry.account = Account.lookup(...)
-    # entry.amount  = Money.from_cents(100_00, 'CAD')
+  double_entry do |e|
+    # TODO: Define entries
+    # e.debit  = Generalis::Asset[:cash]
+    # e.credit = customer.accounts_receivable
+    # e.amount = 100.00
   end
 end
