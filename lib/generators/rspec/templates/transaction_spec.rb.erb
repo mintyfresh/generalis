@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe <%= qualified_class_name %>, type: :model do
-  subject(:<%= factory_name %>) { build(:<%= factory_name %>) }
+  subject(:transaction) { build(:<%= factory_name %>) }
 
   it 'has a valid factory' do
-    expect(<%= factory_name %>).to be_valid
+    expect(transaction).to be_valid
   end
 end
