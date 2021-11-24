@@ -48,18 +48,15 @@ RSpec.describe Ledger::OrderPlacedTransaction, type: :model do
       .with_amount(order.total - order.platform_fee)
   end
 
-  it 'leaves the orders revenue account with a zero balance' do
-    order_placed_transaction.save!
-    expect(Generalis::Revenue[:orders]).to have_balance(0.00, order.currency)
+  it 'applies no net change to the balance of the orders revenue account' do
+    expect(order_placed_transaction).not_to change_balance_of(:orders)
   end
 
-  it 'leaves the delivery fees revenue account with a zero balance' do
-    order_placed_transaction.save!
-    expect(Generalis::Revenue[:delivery_fees]).to have_balance(0.00, order.currency)
+  it 'applies no net change to the balance of the delivery fees revenue account' do
+    expect(order_placed_transaction).not_to change_balance_of(:delivery_fees)
   end
 
   it 'retains the platform fee in the platform fees revenue account' do
-    order_placed_transaction.save!
-    expect(Generalis::Revenue[:platform_fees]).to have_balance(order.platform_fee)
+    expect(order_placed_transaction).to change_balance_of(:platform_fees).by(order.platform_fee, order.currency)
   end
 end
