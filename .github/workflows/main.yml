@@ -29,14 +29,37 @@ jobs:
 
   integration:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - uses: actions/checkout@v2
+      - name: Install Native Dependencies
+        run: sudo apt-get install libpq-dev
       - name: Set up Ruby (Integration)
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.0.2
           bundler-cache: true
           working-directory: integration
+      - name: Setup Test Database
+        working-directory: integration
+        run: |
+          bin/rails db:create db:schema:load
+        env:
+          RAILS_ENV: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
       - name: RSpec (Integration)
         working-directory: integration
         run: bin/rspec
+        env:
+          RAILS_ENV: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
