@@ -9,8 +9,10 @@ RSpec::Matchers.define :have_balance do |amount, currency = nil|
 
   match do |account, owner: nil|
     account = resolve_account(account, owner: owner)
-    amount  = resolve_amount(amount, currency)
+    @actual = resolve_amount(amount, currency)
 
-    account.balance(amount.currency.to_s) == amount
+    account.balance(amount.currency.to_s) == @actual
   end
+
+  diffable
 end
