@@ -5,9 +5,18 @@ module Generalis
     autoload :DSL, 'generalis/transaction/dsl'
     autoload :Links, 'generalis/transaction/links'
 
-    has_many :links, dependent: :destroy, inverse_of: :ledger_transaction
     has_many :entries, dependent: :destroy, inverse_of: :ledger_transaction
     has_many :accounts, through: :entries
+
+    has_many :links, dependent: :destroy, inverse_of: :ledger_transaction do
+      def [](name)
+        if name.is_a?(Symbol) || name.is_a?(String)
+          find_by(name: name.to_s)
+        else
+          super
+        end
+      end
+    end
 
     validates :transaction_id, presence: true, uniqueness: { on: :create }
     validates :entries, presence: true
@@ -37,6 +46,39 @@ module Generalis
 
       where(entries_in_currency.arel.exists)
     }
+
+    # @param attributes [Hash]
+    # @return [void]
+    def add_credit(attributes)
+      raise 'Cannot modify persisted transactions' if persisted?
+
+      entries << Credit.new(attributes)
+    end
+
+    # @param attributes [Hash]
+    # @return [void]
+    def add_debit(attributes)
+      raise 'Cannot modify persisted transactions' if persisted?
+
+      entries << Debit.new(attributes)
+    end
+
+    # @param credit_attributes [Hash]
+    # @param debit_attributes [Hash]
+    # @return [void]
+    def add_double_entry(credit_attributes, debit_attributes)
+      pair_id = SecureRandom.uuid
+
+      add_credit(credit_attributes.merge(pair_id: pair_id))
+      add_debit(debit_attributes.merge(pair_id: pair_id))
+    end
+
+    # @param name [Symbol, String]
+    # @param record [ActiveRecord::Base]
+    # @return [void]
+    def add_link(name, record)
+      links << Link.new(name: name, linkable: record)
+    end
 
     # @return [Hash{String => Money}]
     def credit_amounts

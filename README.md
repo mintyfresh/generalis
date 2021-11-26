@@ -109,6 +109,7 @@ This can be done with:
 
 ## Ledger Transactions
 
+
 ### Transaction DSL
 
 To create a transaction model, run the generator:
@@ -209,6 +210,27 @@ end
 
 Would be allowed, as both the sum of credits and debits equal to $100.00.
 
+### Ad-Hoc Transactions
+
+Generalis also supports creating transactions without using the DSL by directly using the built-in Transaction model. We refer to these as ad-hoc transactions, and they can be useful in cases where there is significant branching in transaction logic, or where defining a transaction class is otherwise not possible.
+
+An example ad-hoc transaction might look like:
+
+```ruby
+transaction = Generalis::Transaction.new
+
+transaction.transaction_id = "charge-#{charge.id}"
+transaction.description = "Customer #{customer.id} charge for #{charge.amount}"
+
+# Define the credits and debits that are involved in the transaction.
+transaction.add_credit(account: Generalis::Asset[:cash], amount: charge.amount)
+transaction.add_debit(account: customer.accounts_receivable, amount: charge.amount)
+
+# Add a linked record for future reference.
+transaction.add_link(:charge, charge)
+
+transaction.save!
+```
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
