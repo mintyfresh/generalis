@@ -37,13 +37,23 @@ TODO: Write usage instructions here
 
 ### Global Accounts
 
+Global ledger accounts can be created with the `define(...)` helper, which will automatically create the account if it doesn't already exist:
+
 ```ruby
 Generalis::Asset.define(:cash)
 ```
 
+Global accounts can be retrieved by their name using either [] index notation, or by using the `.lookup()` helper method:
+
 ```ruby
 cash = Generalis::Asset[:cash]
+
+# OR
+
+cash = Generalis::Asset.lookup(:cash)
 ```
+
+Both methods above will raise an `ActiveRecord::RecordNotFound` error if the requested account does not exist.
 
 ### Associated Accounts
 
@@ -74,6 +84,14 @@ The associated account can then be accessed just like any standard association:
 customer = Customer.create!(...)
 
 customer.accounts_receivable # => #<Generalis::Asset:0x0000... >
+```
+
+It's also possible to access the account using the same helpers methods as global accounts, by specifying the owner record:
+
+```ruby
+customer = Customer.create!(...)
+
+Generalis::Asset[:accounts_receivable, owner: customer] # => #<Generalis::Asset:0x0000... >
 ```
 
 #### Manual Account Creation
@@ -116,7 +134,7 @@ This can be done with:
   has_asset_account :accounts_receivable, dependent: false
 ```
 
-### Currency Support
+### Balances and Currency Support
 
 Generalis has first-class support for currency built-in, however, it doesn't perform any automatic exchange or normalization.
 
@@ -298,6 +316,7 @@ transaction.add_link(:charge, charge)
 
 transaction.save!
 ```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
