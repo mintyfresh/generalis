@@ -232,6 +232,22 @@ Has-many style associations are also supported in the same way:
   has_many_linked :fees
 ```
 
+To add inverse associations to your link records, include the `Linkable` concern:
+
+```ruby
+class Charge < ApplicationRecord
+  include Generalis::Linkable
+end
+```
+
+This will add an association that allows access to any linked transactions:
+
+```ruby
+charge = Charge.find(...)
+
+charge.linked_ledger_transactions # => [ ... ]
+```
+
 #### Double-Entry Notation
 
 ```ruby
