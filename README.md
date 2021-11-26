@@ -147,6 +147,22 @@ class Ledger::ExampleTransaction < Ledger::BaseTransaction
 end
 ```
 
+#### Linked Records
+
+```ruby
+class Ledger::ExampleTransaction < Ledger::BaseTransaction
+  has_one_linked :charge
+end
+```
+
+```ruby
+  has_one_linked :card_charge, class_name: 'Charge'
+```
+
+```ruby
+  has_many_linked :fees
+```
+
 #### Double-Entry Notation
 
 ```ruby

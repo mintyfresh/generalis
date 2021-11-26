@@ -6,7 +6,7 @@ module Generalis
       # @param name [Symbol]
       # @param class_name [String]
       # @return [void]
-      def has_one_linked(name, class_name: name.to_s.camelize) # rubocop:disable Naming/PredicateName
+      def has_one_linked(name, class_name: name.to_s.classify) # rubocop:disable Naming/PredicateName
         has_one :"#{name}_link", -> { where(name: name) },
                 class_name: 'Generalis::Link', dependent: false,
                 foreign_key: :transaction_id, inverse_of: :ledger_transaction
@@ -17,7 +17,7 @@ module Generalis
       # @param name [Symbol]
       # @param class_name [String]
       # @return [void]
-      def has_many_linked(name, class_name: name.to_s.camelize) # rubocop:disable Naming/PredicateName
+      def has_many_linked(name, class_name: name.to_s.singularize.classify) # rubocop:disable Naming/PredicateName
         has_many :"#{name}_links", -> { where(name: name) },
                  class_name: 'Generalis::Link', dependent: false,
                  foreign_key: :transaction_id, inverse_of: :ledger_transaction
