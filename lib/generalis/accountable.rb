@@ -36,6 +36,8 @@ module Generalis
                 dependent: dependent, inverse_of: :owner)
 
         after_create(:"create_#{name}", if: -> { send(name).nil? }) if auto_create
+
+        scope :"without_#{name}", -> { left_joins(name.to_sym).merge(Generalis::Account.where(id: nil)) }
       end
       # rubocop:enable Naming/PredicateName
     end

@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'General Ledger for Ruby of Rails'
   spec.description   = spec.summary
-  spec.homepage      = 'https://github.com/thriver/generalis'
+  spec.homepage      = 'https://github.com/mintyfresh/generalis'
   spec.required_ruby_version = Gem::Requirement.new('>= 3.0')
 
   spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
