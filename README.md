@@ -33,7 +33,23 @@ And then run:
 TODO: Write usage instructions here
 
 ## Ledger Accounts
- 
+
+Generalis includes 4 of the most common major account types:
+
+| Account Type | Balance Behaviour |
+| ------------ | ----------------- |
+| Asset        | Debit Normal      |
+| Expense      | Debit Normal      |
+| Liability    | Credit Normal     |
+| Revenue      | Credit Normal     |
+
+These account types can be accessed as follows:
+ - `Generalis::Asset`
+ - `Generalis::Expense`
+ - `Generalis::Liability`
+ - `Generalis::Revenue`
+
+Ledger accounts can be either global or associated to a particular record. The differences between the to mechanisms is explained in detail below.
 
 ### Global Accounts
 
@@ -42,6 +58,8 @@ Global ledger accounts can be created with the `define(...)` helper, which will 
 ```ruby
 Generalis::Asset.define(:cash)
 ```
+
+Global accounts are unique based on their name, so only one global account (of any type) can exist with a given name.
 
 Global accounts can be retrieved by their name using either [] index notation, or by using the `.lookup()` helper method:
 
@@ -154,6 +172,30 @@ It's also possible to request a summary of all balances on an account:
 
 ```ruby
 cash.balances # => {"CAD"=>#<Money $100.00>,"EUR"=>#<Money €25.00>}
+```
+
+### Custom Account Types
+
+Generalis allows additional account types to be defined if necessary. For example, if you wished to define an equity account type, you would add the following model to your application:
+
+```ruby
+class Equity < Generalis::Account
+  balance_type :credit_normal
+end
+```
+
+The `balance_type` macro defines the behaviour of the balance when credited or debited an amount. The supported modes are:
+  - `:debit_normal` (like Asset or Expense accounts)
+  - `:credit_normal` (like Liability or Revenue accounts)
+
+Alternatively, if you'd prefer to keep naming consistent with the built-in account types, you can instead define your account in an initializer:
+
+```ruby
+module Generalis
+  class Equity < Account
+    balance_type :credit_normal
+  end
+end
 ```
 
 ## Ledger Transactions
