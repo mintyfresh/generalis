@@ -33,12 +33,21 @@ And then run:
 TODO: Write usage instructions here
 
 ## Ledger Accounts
+ 
 
 ### Global Accounts
 
+```ruby
+Generalis::Asset.define(:cash)
+```
+
+```ruby
+cash = Generalis::Asset[:cash]
+```
+
 ### Associated Accounts
 
-Generalis providers an `Accountable` concern that can be included into your application's models to automatically associate ledger accounts.
+Generalis providers an `Accountable` concern that can be included into your application's ActiveRecord models to automatically associate ledger accounts.
 
 For example, to create an Asset account called "accounts_receivable" for a customer model, use:
 
@@ -107,6 +116,28 @@ This can be done with:
   has_asset_account :accounts_receivable, dependent: false
 ```
 
+### Currency Support
+
+Generalis has first-class support for currency built-in, however, it doesn't perform any automatic exchange or normalization.
+
+Instead, each currency is stored as a separate balance on the account, for example:
+
+```ruby
+cash = Generalis::Asset[:cash]
+
+cash.balance('CAD') # => #<Money $100.00>
+cash.balance('USD') # => #<Money $0.00>
+cash.balance('EUR') # => #<Money €25.00>
+```
+
+Requesting the balance of a currency that does not appear on an account will return 0 (as a Money object).
+
+It's also possible to request a summary of all balances on an account:
+
+```ruby
+cash.balances # => {"CAD"=>#<Money $100.00>,"EUR"=>#<Money €25.00>}
+```
+
 ## Ledger Transactions
 
 
@@ -149,15 +180,35 @@ end
 
 #### Linked Records
 
+Generalis allows ActiveRecord models to be associated with transaction classes:
+
 ```ruby
 class Ledger::ExampleTransaction < Ledger::BaseTransaction
   has_one_linked :charge
 end
 ```
 
+Linked records are managed through a polymorphic join-table (handled by the `Generalis::Link` model), so any model can be associated to a transaction without requiring a database migration.
+
+Linked records behave like a standard Rails association, and can be assigned as normal:
+
 ```ruby
-  has_one_linked :card_charge, class_name: 'Charge'
+transaction = Ledger::ExampleTransaction.new
+transaction.charge = Charge.find(...)
+
+# OR
+
+charge = Charge.find(...)
+transaction = Ledger::ExampleTransaction.new(charge: charge)
 ```
+
+In cases where the name of the association does not match the name of the class, it's possible to specify the class name explicitly:
+
+```ruby
+  has_one_linked :charge, class_name: 'Card::Charge'
+```
+
+Has-many style associations are also supported in the same way:
 
 ```ruby
   has_many_linked :fees
