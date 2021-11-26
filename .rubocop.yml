@@ -10,6 +10,7 @@ AllCops:
     - bin/*
     - integration/bin/*
     - integration/db/schema.rb
+    - vendor/*
 
 Layout/AccessModifierIndentation:
   EnforcedStyle: outdent
