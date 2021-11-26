@@ -3,3 +3,13 @@ inherit_from: '../.rubocop.yml'
 AllCops:
   Exclude:
     - bin/*
+
+Metrics/MethodLength:
+  Exclude:
+    - 'db/migrate/*.rb'
+
+Rails/FilePath:
+  EnforcedStyle: arguments
+
+Style/ClassAndModuleChildren:
+  Enabled: false

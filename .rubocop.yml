@@ -5,6 +5,7 @@ require:
 
 AllCops:
   NewCops: enable
+  SuggestExtensions: false
   TargetRubyVersion: 3.0
   Exclude:
     - bin/*
@@ -39,4 +40,7 @@ RSpec/ExpectChange:
   Enabled: false
 
 Style/Documentation:
+  Enabled: false
+
+Style/ParallelAssignment:
   Enabled: false

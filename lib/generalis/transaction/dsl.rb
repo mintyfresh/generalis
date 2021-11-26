@@ -17,16 +17,19 @@ module Generalis
 
         # @return [Array<Entry>]
         def entries
-          if amount.negative?
-            # Reverse the debit/credit accounts when supplied a negative amount.
-            [Debit.new(account:  credit, amount: -amount, pair_id: pair_id),
-             Credit.new(account: debit,  amount: -amount, pair_id: pair_id)]
-          else
-            [Debit.new(account:  debit,  amount: amount, pair_id: pair_id),
-             Credit.new(account: credit, amount: amount, pair_id: pair_id)]
-          end
+          credit, debit = self.credit, self.debit
+
+          # Reverse the debit/credit accounts when supplied a negative amount.
+          credit, debit = debit, credit if amount.negative?
+
+          [
+            # Flip the amount back to positive since we've already swapped accounts.
+            Credit.new(account: credit, amount: amount.abs, pair_id: pair_id),
+            Debit.new(account:  debit, amount:  amount.abs, pair_id: pair_id)
+          ]
         end
 
+        # @return [String]
         def pair_id
           @pair_id ||= SecureRandom.uuid
         end
