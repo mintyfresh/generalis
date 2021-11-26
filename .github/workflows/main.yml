@@ -37,6 +37,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: generalis_integration_test
         options: --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - uses: actions/checkout@v2
@@ -54,12 +55,14 @@ jobs:
           bin/rails db:create db:schema:load
         env:
           RAILS_ENV: test
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          PGHOST: localhost
+          PGUSER: postgres
+          PGPASSWORD: postgres
       - name: RSpec (Integration)
         working-directory: integration
         run: bin/rspec
         env:
           RAILS_ENV: test
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          PGHOST: localhost
+          PGUSER: postgres
+          PGPASSWORD: postgres
