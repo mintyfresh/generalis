@@ -317,6 +317,47 @@ transaction.add_link(:charge, charge)
 transaction.save!
 ```
 
+## RSpec Matchers
+
+Generalis includes a number of RSpec matchers to help with testing ledger transactions. To use them, add this to your `rails_helper.rb` file:
+
+```ruby
+require 'generalis/rspec'
+```
+
+### Credit/Debit Account Matchers
+
+```ruby
+let(:charge) { charge.amount }
+let(:customer) { charge.customer }
+
+it 'credits the charge amount to the cash account' do
+  expect(transaction).to credit_account(:cash).with_amount(charge.amount)
+end
+
+it "debits the charge amount to the customer's receivable account" do
+  expect(transaction).to debit_account(customer.accounts_receivable).with_amount(charge.amount)
+end
+```
+
+### Change Balance of Account Matcher
+
+```ruby
+it 'increases the balance of the cash account by the charge amount' do
+  expect(transaction).to change_balance_of(:cash).by(charge.amount)
+end
+```
+
+```ruby
+it 'does not change the balance of the orders revenue account' do
+  expect(transaction).not_to change_balance_of(:orders)
+end
+```
+
+### Examples
+
+Examples of the included RSpec matches being used can be found in the integration test-suite directory, [here](./integration/spec/models/ledger).
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
