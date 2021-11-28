@@ -386,7 +386,7 @@ require 'generalis/rspec'
 ### Credit/Debit Account Matchers
 
 ```ruby
-let(:charge) { charge.amount }
+let(:charge) { create(:charge) }
 let(:customer) { charge.customer }
 
 it 'credits the charge amount to the cash account' do
@@ -411,6 +411,22 @@ it 'does not change the balance of the orders revenue account' do
   expect(transaction).not_to change_balance_of(:orders)
 end
 ```
+
+### Have Balance Matcher
+
+For testing integration between parts of the system and verifying financial flows, the `have_balance` matcher is recommended.
+
+```ruby
+let(:order) { create(:order) }
+let(:customer) { order.customer }
+
+it "adds the total of the order to the customer's receivable balance after checkout" do
+  order.checkout!
+  expect(customer.accounts_receivable).to have_balance(order.total)
+end
+```
+
+Unlike the `debit_account` and `credit_account` matchers which validate a transaction, the `have_balance` matcher tests the balance of a ledger account.
 
 ### Examples
 
