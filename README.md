@@ -60,6 +60,7 @@ Generalis::Asset.define(:cash)
 ```
 
 Global accounts are unique based on their name, so only one global account (of any type) can exist with a given name.
+It's typical practice to define your global accounts ahead of time, as a seed.
 
 Global accounts can be retrieved by their name using either [] index notation, or by using the `.lookup()` helper method:
 
