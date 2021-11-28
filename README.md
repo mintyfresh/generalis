@@ -56,7 +56,7 @@ Ledger accounts can be either global or associated to a particular record. The d
 Global ledger accounts are typically those that are associated with your own business.
 For example, your company's own cash, revenue, and expenses would typically be global accounts in Generalis.
 
-For accounts which pertain to a particular client or customer (like owed balance or store credits), see the section on [Associated Accounts](#Associated%20Accounts).
+For accounts which pertain to a particular client or customer (like owed balance or store credits), see the section on [Associated Accounts](#associated-accounts).
 
 #### Defining Global Accounts
 
