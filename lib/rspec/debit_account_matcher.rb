@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require_relative 'helpers/format_entry_helper'
+require_relative 'helpers/format_helper'
 require_relative 'helpers/resolve_account_helper'
 require_relative 'helpers/resolve_amount_helper'
 
 RSpec::Matchers.define :debit_account do |account, owner: nil|
-  include Generalis::RSpec::FormatEntryHelper
+  include Generalis::RSpec::FormatHelper
   include Generalis::RSpec::ResolveAccountHelper
   include Generalis::RSpec::ResolveAmountHelper
 
@@ -23,12 +23,12 @@ RSpec::Matchers.define :debit_account do |account, owner: nil|
   end
 
   failure_message do |transaction|
-    message  = "expected transaction to credit account #{@account.class}[:#{@account.name}]"
-    message += " with amount #{@amount.format} (#{@amount.currency})" if @amount
-    message += "\n\n"
-    message += "Credits:\n"
+    message  = "expected transaction to debit account #{format_account(@account)}"
+    message += " with amount #{format_money(@amount)}" if @amount
+    message += "\n"
+    message += "\nCredits:\n"
     message += transaction.entries.select(&:credit?).map { |entry| format_entry(entry) }.join("\n")
-    message += "Debits:\n"
+    message += "\nDebits:\n"
     message += transaction.entries.select(&:debit?).map { |entry| format_entry(entry) }.join("\n")
     message
   end
