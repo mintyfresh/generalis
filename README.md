@@ -53,7 +53,14 @@ Ledger accounts can be either global or associated to a particular record. The d
 
 ### Global Accounts
 
-Global ledger accounts can be created with the `define(...)` helper, which will automatically create the account if it doesn't already exist:
+Global ledger accounts are typically those that are associated with your own business.
+For example, your company's own cash, revenue, and expenses would typically be global accounts in Generalis.
+
+For accounts which pertain to a particular client or customer (like owed balance or store credits), see the section on [Associated Accounts](#Associated%20Accounts).
+
+#### Defining Global Accounts
+
+Global accounts can be created with the `define(...)` helper, which will automatically create the account if it doesn't already exist:
 
 ```ruby
 Generalis::Asset.define(:cash)
@@ -62,7 +69,9 @@ Generalis::Asset.define(:cash)
 Global accounts are unique based on their name, so only one global account (of any type) can exist with a given name.
 It's typical practice to define your global accounts ahead of time, as a seed.
 
-Global accounts can be retrieved by their name using either [] index notation, or by using the `.lookup()` helper method:
+#### Retrieving Global Accounts
+
+Global accounts can be retrieved by their name using either `[]` index notation or by using the `.lookup()` helper method:
 
 ```ruby
 cash = Generalis::Asset[:cash]
@@ -73,6 +82,8 @@ cash = Generalis::Asset.lookup(:cash)
 ```
 
 Both methods above will raise an `ActiveRecord::RecordNotFound` error if the requested account does not exist.
+
+Generalis accounts are just plain-old ActiveRecord objects, so it's also possible to use all the normal query methods like `.where(...)` and `.find_by(...)`.
 
 ### Associated Accounts
 
