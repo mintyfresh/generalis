@@ -137,7 +137,7 @@ customers_missing_accounts = Customer.without_accounts_receivable
 
 #### Dependent Account Behaviour
 
-By default, associated accounts are treated as 'dependent: :restrict_with_error`. This means that trying to delete a record with associated accounts will be prevented and ActiveModel::Errors will be set.
+By default, associated accounts are treated as `dependent: :restrict_with_error`. This means that trying to delete a record with associated accounts will be prevented and ActiveModel::Errors will be set.
 
 This behaviour can be changed using:
 
