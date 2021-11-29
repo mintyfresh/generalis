@@ -283,6 +283,20 @@ end
 
 The `transaction_id`, `description`, `occurred_at`, and `metadata` DSL macros are used to automatically set their corresponding fields on the constructed Transaction. The functions of these fields is described in the table [here](#ledger-transactions).
 
+Transactions behave like ActiveRecord models, so they can be built and saved as you would any other model in your application:
+
+```ruby
+transaction = Ledger::ExampleTransaction.new
+
+if transaction.save
+  # All good!
+else
+  puts transaction.errors
+end
+```
+
+**NOTE:** Beware of potential naming collisions between `transaction` and some built-in ActiveRecord methods. If creating a `belongs_to` or `has_one` association to a Transaction, you will need to name the association `ledger_transaction` or similar to avoid overwriting the built-in methods.
+
 #### Linked Records
 
 Generalis allows ActiveRecord models to be associated with transaction classes:
