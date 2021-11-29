@@ -28,7 +28,7 @@ module Generalis
     before_create do
       # Acquire locks on all participating accounts to calculate their balance.
       # Locks are acquired in a deterministic sequence to prevent deadlocks.
-      entries.map(&:account).reject(&:new_record?).uniq.sort_by(&:id).each(&:lock!)
+      Account.lock_for_balance_calculation(entries.map(&:account).reject(&:new_record?))
     end
 
     scope :at_or_before, -> (time) { where(occurred_at: ..time) }

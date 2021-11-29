@@ -50,6 +50,15 @@ module Generalis
       end
     end
 
+    # Acquires a database lock on one or more accounts for balance calculations.
+    # Locks are acquired in a deterministic sequence to prevent deadlocks.
+    #
+    # @param accounts [Array<Account>]
+    # @return [Boolean]
+    def self.lock_for_balance_calculation(accounts)
+      unscoped.where(id: accounts).order(:id).lock(true).ids.present?
+    end
+
     # @return [Boolean]
     def credit_normal?
       coefficient == CREDIT_NORMAL
