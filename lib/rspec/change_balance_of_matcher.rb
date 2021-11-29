@@ -8,7 +8,7 @@ RSpec::Matchers.define :change_balance_of do |account, owner: nil|
   include Generalis::RSpec::ResolveAmountHelper
 
   match do |transaction|
-    transaction.validate if transaction.entries.none?
+    transaction.prepare
 
     account = resolve_account(account, owner: owner)
     entries = transaction.entries.select { |entry| entry.account == account }
