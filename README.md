@@ -87,7 +87,14 @@ Generalis accounts are just plain-old ActiveRecord objects, so it's also possibl
 
 ### Associated Accounts
 
-Generalis providers an `Accountable` concern that can be included into your application's ActiveRecord models to automatically associate ledger accounts.
+Associated ledger accounts are used to represent balances that belong to a particular client, customer, or some other record in your system. For example, a balance owed by a particular customer or a store credit issued to a customer would be modeled by an associated account.
+
+When using associated accounts, multiple ledger account records may share the same name, but will be uniquely distinguished by their `owner` association.
+The balances each of these owner records is therefore tracked separately.
+
+#### Defining Associated Accounts
+
+Generalis provides an `Accountable` concern that should be included into your application's ActiveRecord models to automatically associate ledger accounts.
 
 For example, to create an Asset account called "accounts_receivable" for a customer model, use:
 

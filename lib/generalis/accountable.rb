@@ -28,8 +28,6 @@ module Generalis
         has_account(name, class_name: 'Generalis::Revenue', auto_create: auto_create, dependent: dependent)
       end
 
-    private
-
       def has_account(name, class_name:, auto_create: true, dependent: :restrict_with_error)
         has_one(name, -> { where(name: name) },
                 as: :owner, class_name: class_name, # rubocop:disable Rails/ReflectionClassName
