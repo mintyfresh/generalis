@@ -225,6 +225,10 @@ Ledger transactions are a record of an event or action in the system that impact
 
 Writing to the ledger is accomplished by creating a Transaction record, with the associated credit and debit entries applying changes to the balances of their corresponding accounts.
 
+For a Transaction to be valid, the credit and debit entries included in the transaction must balance. This means that the sum of all credits must equal the sum of all debits (per currency).
+This is a best-effort constraint is enforced by a validation on the transaction model, as well as by marking key attributes on persisted ledger entries as read-only.
+Generalis is not able to prevent validations from being disabled or removed, nor existing data from being modified directly in the database. For more information, see the [data integrity](#data-integrity) section.
+
 Transactions also store additional information to describe the changes made to the ledger:
 
 | Field          | Type          | Usage |
@@ -417,6 +421,45 @@ transaction.add_debit(account: customer.accounts_receivable, amount: charge.amou
 transaction.add_link(:charge, charge)
 
 transaction.save!
+```
+
+## Data Integrity
+
+Generalis includes several mechanisms that are intended to ensure correctness and integrity of the ledger state and balances. These include validations on the Transaction model, attributes being marked read-only on the ledger Entry model, and automatic locking for ledger Accounts included in a Transaction.
+
+However, it should be noted that these are all best-effort mechanisms and they are not able to catch or prevent all efforts to tamper with the data.
+Validations can be disabled or removed, read-only constraints can be ignored by queries made directly in the database.
+
+For this reason, a number of tools are provided to assist with prevent and catching these issues if they occur.
+
+### Verifying Balances
+
+The most important point of integrity that Generalis is concerned with is ensuring that the ledger balances. This is traditionally verified using the Balance Sheet Equation, which often takes the form of something like:
+
+```
+Assets + Expenses = Liabilities + Revenues + Equity
+```
+
+Generalis generalizes this formula to the following constraint:
+
+```
+SUM(Debit-Normal Accounts) - SUM(Credit-Normal Accounts) = 0
+```
+
+This condition can then be verified with the `trial_balances` helper method:
+
+```ruby
+Generalis.trial_balances # => {"CAD"=>0,"USD"=>0,"EUR"=>0}
+```
+
+Provided that the balance for each currency sums to zero, the ledger balances for that currency. Any non-zero value indicates that the is error in the ledger.
+
+### Locating Problematic Transactions
+
+If a balance issue has been identified, it's important to locate which transactions are causing the issue. Generalis provides a scope to locate any transactions which do not themselves balance:
+
+```ruby
+Generalis::Transaction.imbalanced # => [...]
 ```
 
 ## RSpec Matchers

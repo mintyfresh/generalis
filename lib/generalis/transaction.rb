@@ -47,6 +47,14 @@ module Generalis
       where(entries_in_currency.arel.exists)
     }
 
+    scope :imbalanced, lambda {
+      subquery = joins(:entries).group(:id, Entry.arel_table[:currency]).having(
+        (Entry.arel_table[:amount_cents] * Entry.arel_table[:coefficient]).sum.not_eq(0)
+      )
+
+      where(id: subquery.select(:id))
+    }
+
     # @param attributes [Hash]
     # @return [void]
     def add_credit(attributes)
