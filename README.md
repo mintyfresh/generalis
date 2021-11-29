@@ -462,6 +462,48 @@ If a balance issue has been identified, it's important to locate which transacti
 Generalis::Transaction.imbalanced # => [...]
 ```
 
+### Accounts and Locking
+
+Generalis automatically handles locking accounts involved in a transaction for the purposes of calculating their balances after the transaction.
+However, it is important to note that these locks are acquired _after_ the ledger entries have been prepared by the DSL.
+
+This means that if the balances of the accounts are used as part of the `amount` of the ledger entry, there is a potential race condition with other transactions that may modify the balance of that account.
+
+As an example, consider this transaction which exchanges a customer's store credit from CAD to USD:
+
+```ruby
+class Ledger::ExchangeStoreCreditTransaction < Ledger::BaseTransaction
+  # ...
+
+  double_entry do |e|
+    e.debit  = Generalis::Asset[:cash]
+    e.credit = customer.store_credit
+    e.amount = customer.store_credit.balance('CAD')
+  end
+
+  double_entry do |e|
+    e.debit  = customer.store_credit
+    e.credit = Generalis::Asset[:cash]
+    e.amount = customer.store_credit.balance('CAD').exchange_to('USD')
+  end
+end
+```
+
+It is possible for another transaction to have modified the balance of the `store_credit` account between when the transaction was prepared and when the locks would be acquired to calculate its final balances.
+
+One approach to mitigate this is to acquire locks on the involved accounts ahead of time using a `before_prepare` hook and the `lock_for_account_balance` helper method:
+
+```ruby
+  before_prepare do
+    Generalis::Account.lock_for_account_balance(
+      customer.store_credit,
+      Generalis::Asset[:cash]
+    )
+  end
+```
+
+**NOTE:** To avoid the risk of deadlocks between transactions, it is important to include _all_ accounts involved in a transaction when acquiring locks.
+
 ## RSpec Matchers
 
 Generalis includes a number of RSpec matchers to help with testing ledger transactions. To use them, add this to your `rails_helper.rb` file:
