@@ -583,6 +583,15 @@ Unlike the `debit_account` and `credit_account` matchers which validate a transa
 
 Examples of the included RSpec matches being used can be found in the integration test-suite directory, [here](./integration/spec/models/ledger).
 
+## Future Features and Wishlist
+
+Generalis can be better! There's features and helpful tools that we want to build in the future but haven't gotten around to yet. Some of them are:
+
+ [ ] Better install process for MoneyRails
+ [ ] More documentation for ledger Entry records
+ [ ] Transaction revert and error correction tools
+ [ ] Rails::Engine for a pluggable API
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
