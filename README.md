@@ -233,7 +233,7 @@ Transactions also store additional information to describe the changes made to t
 | transaction_id | String        | A unique key for the transaction, intended to prevent duplicate operations, typically human-readable. |
 | description    | String        | An optional message describing the event or action that caused this transaction. |
 | occurred_at    | Time          | An optional timestamp indicating when the event or action occurred that trigger this transaction. |
-| metadata       | Hash or Array | An optional JSON field uses to store additional, application-specific transaction information. |
+| metadata       | Hash or Array | An optional JSON field used to store application-specific information. Can be used with [`store_accessor`](https://api.rubyonrails.org/classes/ActiveRecord/Store.html) to define custom attributes. |
 
 **NOTE:** In most cases, `metadata` should not be used to store relationships to other records. Instead, the [linked records](#linked-records) mechanism should be used.
 
