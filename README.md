@@ -404,6 +404,8 @@ require 'generalis/rspec'
 
 ### Credit/Debit Account Matchers
 
+When testing transactions, it may be helpful to verify that a particular amount has been credited or debited towards a particular account. For this purpose, the `credit_account` and `debit_account` matchers:
+
 ```ruby
 let(:charge) { create(:charge) }
 let(:customer) { charge.customer }
@@ -417,19 +419,39 @@ it "debits the charge amount to the customer's receivable account" do
 end
 ```
 
+Accounts may be specified either by a name (for global accounts) or by an instance of the account object.
+The amount may be specified by a Money object or by a numeric value and a currency:
+
+```ruby
+  expect(transaction).to credit_account(:cash).with_amount(100.00, 'CAD')
+```
+
+These matchers are currency aware, and will only consider the currency that is specified in the amount.
+
+**NOTE:** These matchers will sum together all credits or debits that were made towards the same account. It is not necessary for the transaction to be persisted to use this matcher.
+
 ### Change Balance of Account Matcher
+
+When testing transactions, it may also be useful to set expectations of what the net-change to an account balance will be after any credits or debits have been applied towards the account. To do so, the `change_balance_of` matcher is provided:
 
 ```ruby
 it 'increases the balance of the cash account by the charge amount' do
   expect(transaction).to change_balance_of(:cash).by(charge.amount)
 end
-```
 
-```ruby
 it 'does not change the balance of the orders revenue account' do
   expect(transaction).not_to change_balance_of(:orders)
 end
 ```
+
+Accounts may be specified either by a name (for global accounts) or by an instance of the account object.
+The amount may be specified by a Money object or by a numeric value and a currency:
+
+```ruby
+  expect(transaction).to change_balance_of(:cash).by(100.00, 'CAD')
+```
+
+This matcher  currency aware, and will only consider the currency that is specified in the amount.
 
 ### Have Balance Matcher
 
