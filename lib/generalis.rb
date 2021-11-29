@@ -3,6 +3,7 @@
 require 'active_record'
 require 'active_support/core_ext'
 
+require_relative 'generalis/config'
 require_relative 'generalis/version'
 
 module Generalis
@@ -34,7 +35,21 @@ module Generalis
       .sum((Entry.arel_table[:balance_after_cents] * Account.arel_table[:coefficient]))
   end
 
+  # @return [Config]
+  def self.config
+    @config ||= Config.new.freeze
+  end
+
+  # @return [void]
+  def self.configure
+    config = Config.new
+    yield(config)
+
+    @config = config.freeze
+  end
+
+  # @return [String]
   def self.table_name_prefix
-    'ledger_'
+    config.table_name_prefix
   end
 end

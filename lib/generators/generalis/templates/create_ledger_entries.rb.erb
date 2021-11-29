@@ -2,10 +2,10 @@
 
 class CreateLedgerEntries < ActiveRecord::Migration[6.1]
   def change
-    create_table :ledger_entries do |t|
+    create_table <%= prefixed_table_name(:entries) %> do |t|
       t.string     :type, null: false
-      t.belongs_to :account, null: false, foreign_key: { to_table: :ledger_accounts }
-      t.belongs_to :transaction, null: false, foreign_key: { to_table: :ledger_transactions }
+      t.belongs_to :account, null: false, foreign_key: { to_table: <%= prefixed_table_name(:accounts) %> }
+      t.belongs_to :transaction, null: false, foreign_key: { to_table: <%= prefixed_table_name(:transactions) %> }
       t.uuid       :pair_id, null: true
       t.string     :currency, null: false
       t.integer    :amount_cents, null: false

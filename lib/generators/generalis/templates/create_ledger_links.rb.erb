@@ -2,8 +2,8 @@
 
 class CreateLedgerLinks < ActiveRecord::Migration[6.1]
   def change
-    create_table :ledger_links do |t|
-      t.belongs_to :transaction, null: false, foreign_key: { on_delete: :cascade, to_table: :ledger_transactions }
+    create_table <%= prefixed_table_name(:links) %> do |t|
+      t.belongs_to :transaction, null: false, foreign_key: { on_delete: :cascade, to_table: <%= prefixed_table_name(:transactions) %> }
       t.belongs_to :linkable, polymorphic: true, null: false
       t.string     :name, null: false
       t.timestamps default: -> { 'NOW()' }

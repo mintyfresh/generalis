@@ -32,6 +32,12 @@ module Generalis
           ':string'
         end
       end
+
+      # @param name [Symbol, String]
+      # @return [String]
+      def prefixed_table_name(name)
+        ":#{Generalis.table_name_prefix}#{name}"
+      end
     end
   end
 end

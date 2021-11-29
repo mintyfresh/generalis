@@ -2,7 +2,7 @@
 
 class CreateLedgerAccounts < ActiveRecord::Migration[6.1]
   def change
-    create_table :ledger_accounts do |t|
+    create_table <%= prefixed_table_name(:accounts) %> do |t|
       t.string     :type, null: false
       t.belongs_to :owner, null: true, polymorphic: true
       t.string     :name, null: false

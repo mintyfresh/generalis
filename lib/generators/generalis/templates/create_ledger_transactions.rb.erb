@@ -2,7 +2,7 @@
 
 class CreateLedgerTransactions < ActiveRecord::Migration[6.1]
   def change
-    create_table :ledger_transactions do |t|
+    create_table <%= prefixed_table_name(:transactions) %> do |t|
       t.string     :type
       t.string     :transaction_id, null: false, index: { unique: true }
       t.string     :description
