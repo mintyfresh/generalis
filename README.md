@@ -28,6 +28,12 @@ And then run:
 
     $ bin/rails db:migrate
 
+### MoneyRails Integration
+
+Generalis relies on MoneyRails to operate and handle currencies correctly. It's not necessary to add it to your Gemfile directly, however, it is necessary to generate the configuration initializer:
+
+https://github.com/RubyMoney/money-rails#installation
+
 ## Usage
 
 TODO: Write usage instructions here
