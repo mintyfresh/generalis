@@ -16,7 +16,7 @@ And then execute:
 
     $ bundle install
 
-To generate the classes and configuration used by generalis, run:
+To generate the classes and configuration used by Generalis, run:
 
     $ bin/rails generate generalis:install
 
@@ -330,31 +330,37 @@ charge.linked_ledger_transactions # => [ ... ]
 
 #### Double-Entry Notation
 
+When using the default double-entry notation, a debit and credit entry are defined together with a shared amount. These two entries are also linked together by a common key (called a `pair_id`) so that they be retrieved together.
+
+If you are already using MoneyRails and store amounts as Money objects, these can be assigned directly to the constructed entries:
+
 ```ruby
 double_entry do |e|
   e.debit  = Generalis::Asset[:cash]
   e.credit = customer.accounts_receivable
-  e.amount = 100.00
+  e.amount = charge.amount
 end
 ```
 
-If your application does not use Money objects, you can specify amounts and currency explicitly via:
+If your application does not use Money objects, the amount and currency must be specified explictly. This is done by assigning values to the `amount` and `currency` fields on the entry builder:
 
 ```ruby
   e.amount   = 100.00
   e.currency = 'CAD'
 ```
 
-Or if your application works with money as integers, it can be assigned directly as a value in cents:
+If your application stores money as an integer number of cents, the `amount_cents` field can be assigned instead:
 
 ```ruby
   e.amount_cents = 100_00
   e.currency     = 'CAD'
 ```
 
-Internally, generalis stores money using Money objects.
+Regardless of which mechanism is used, Generalis internally will store these amounts as Money objects.
 
 #### Manual Credit/Debit Notation
+
+Generalis also provides an alternative to the double-entry notation where credit and debit entries may be separately defined in the DSL:
 
 ```ruby
 credit do |e|
@@ -368,7 +374,7 @@ debit do |e|
 end
 ```
 
-When using this notation, debit and credit entries will not be linked together as a pair. However, the credited and debited amounts (per currency) must still be equal.
+When using this notation, debit and credit entries will not be linked together as a pair (although you can still manually assign a `pair_id`). However, the credited and debited amounts (per currency) must still be equal.
 
 This notation also allows for transactions that have non-equal numbers of credits and debits, provided that their total amounts sum up to be equal. For example:
 
@@ -389,7 +395,7 @@ debit do |e|
 end
 ```
 
-Would be allowed, as both the sum of credits and debits equal to $100.00.
+This operation would be considered valid, as both the sum of credits and debits equal to $100.00.
 
 ### Ad-Hoc Transactions
 
