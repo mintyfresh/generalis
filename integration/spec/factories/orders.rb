@@ -9,6 +9,9 @@ FactoryBot.define do
     order_amount { Faker::Commerce.price }
     delivery_fee { [0.00, 5.00, 10.00, 20.00].sample }
     platform_fee { order_amount * 0.10 }
-    total { order_amount + delivery_fee + platform_fee }
+
+    after(:build) do |order|
+      order.total = order.order_amount + order.delivery_fee + order.platform_fee
+    end
   end
 end
