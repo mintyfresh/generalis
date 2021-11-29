@@ -34,10 +34,6 @@ Generalis relies on MoneyRails to operate and handle currencies correctly. It's 
 
 https://github.com/RubyMoney/money-rails#installation
 
-## Usage
-
-TODO: Write usage instructions here
-
 ## Ledger Accounts
 
 Generalis includes 4 of the most common major account types:
@@ -225,6 +221,21 @@ end
 
 ## Ledger Transactions
 
+Ledger transactions are a record of an event or action in the system that impacted the ledger. They are made up of a collection of ledger entries which occurred together.
+
+Writing to the ledger is accomplished by creating a Transaction record, with the associated credit and debit entries applying changes to the balances of their corresponding accounts.
+
+Transactions also store additional information to describe the changes made to the ledger:
+
+| Field          | Type          | Usage |
+| -------------- | ------------- | ----- |
+| type           | String        | An optional field used for Rails' Single-Table Inheritance functionality. |
+| transaction_id | String        | A unique key for the transaction, intended to prevent duplicate operations, typically human-readable. |
+| description    | String        | An optional message describing the event or action that caused this transaction. |
+| occurred_at    | Time          | An optional timestamp indicating when the event or action occurred that trigger this transaction. |
+| metadata       | Hash or Array | An optional JSON field uses to store additional, application-specific transaction information. |
+
+**NOTE:** In most cases, `metadata` should not be used to store relationships to other records. Instead, the [linked records](#linked-records) mechanism should be used.
 
 ### Transaction DSL
 
