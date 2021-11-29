@@ -274,6 +274,8 @@ class Ledger::ExampleTransaction < Ledger::BaseTransaction
 end
 ```
 
+The `transaction_id`, `description`, `occurred_at`, and `metadata` DSL macros are used to automatically set their corresponding fields on the constructed Transaction. The functions of these fields is described in the table [here](#ledger-transactions).
+
 #### Linked Records
 
 Generalis allows ActiveRecord models to be associated with transaction classes:
