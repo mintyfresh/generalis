@@ -365,7 +365,7 @@ double_entry do |e|
 end
 ```
 
-If your application does not use Money objects, the amount and currency must be specified explictly. This is done by assigning values to the `amount` and `currency` fields on the entry builder:
+If your application does not use Money objects, the amount and currency must be specified explicitly. This is done by assigning values to the `amount` and `currency` fields on the entry builder:
 
 ```ruby
   e.amount   = 100.00
@@ -606,10 +606,10 @@ Examples of the included RSpec matches being used can be found in the integratio
 
 Generalis can be better! There's features and helpful tools that we want to build in the future but haven't gotten around to yet. Some of them are:
 
- [ ] Better install process for MoneyRails
- [ ] More documentation for ledger Entry records
- [ ] Transaction revert and error correction tools
- [ ] Rails::Engine for a pluggable API
+ - [ ] Better install process for MoneyRails
+ - [ ] More documentation for ledger Entry records
+ - [ ] Transaction revert and error correction tools
+ - [ ] Rails::Engine for a pluggable API
 
 ## Development
 
