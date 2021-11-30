@@ -3,7 +3,7 @@
 Generalis is a financial general ledger for ActiveRecord.
 It incorporates a light DSL for defining ledger transactions and connecting financial records to your existing models, built-in currency support, and RSpec integrations.
 
-If DSLs are not to your liking, Generalis also provides support for [ad-hoc transaction](#ad-hoc-transactions) that behave more like plain-old ActiveRecord models.
+If DSLs are not to your liking, Generalis also provides support for [ad-hoc transactions](#ad-hoc-transactions) that behave more like plain-old ActiveRecord models.
 
 Generalis currently only supports and is tested against PostgreSQL, but support for other database systems is planned.
 
@@ -53,6 +53,8 @@ These account types can be accessed as follows:
  - `Generalis::Expense`
  - `Generalis::Liability`
  - `Generalis::Revenue`
+
+Additional account types can be defined if necessary. (See the section on [custom account types](#custom-account-types).)
 
 Ledger accounts can be either global or associated to a particular record. The differences between the to mechanisms is explained in detail below.
 
