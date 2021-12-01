@@ -97,5 +97,13 @@ module Generalis
     def debit_amounts
       entries.select(&:debit?).group_by(&:currency).transform_values { |entries| entries.sum(&:amount) }
     end
+
+    # Checks whether the transaction is would have any affect on account balances.
+    # A no-op transaction is one that has no entries with non-zero amounts.
+    #
+    # @return [Boolean]
+    def no_op?
+      entries.all?(&:no_op?)
+    end
   end
 end

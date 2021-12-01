@@ -33,6 +33,8 @@ module Generalis
         end
       end
 
+    private
+
       # @param name [Symbol, String]
       # @return [String]
       def prefixed_table_name(name)

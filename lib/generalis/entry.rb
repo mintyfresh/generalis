@@ -53,6 +53,11 @@ module Generalis
       amount * coefficient * account.coefficient
     end
 
+    # @return [Boolean]
+    def no_op?
+      amount.zero?
+    end
+
     # @return [Entry, nil]
     def opposite
       ledger_transaction.entries.find_by(pair_id: pair_id, coefficient: -coefficient)
